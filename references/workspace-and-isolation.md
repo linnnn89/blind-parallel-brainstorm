@@ -11,7 +11,8 @@ operations.
 
 1. Confirm the target project root.
 2. Create `brainstorm/` and its subdirectories.
-3. Copy the workspace templates from `templates/brainstorm/`, including `BUSTED.md`.
+3. Copy the workspace templates from `templates/brainstorm/`, including `BUSTED.md` and
+   `EVIDENCE_GATE.md`.
 4. Fill `BRIEF.md` from user-approved facts and constraints only.
 5. Leave indexes and `BUSTED.md` empty except for their headers and instructions.
 6. Do not import old proposals, rankings, preferred solutions, or undocumented failures into the
@@ -78,7 +79,12 @@ If files are missing:
 
 - recreate structural files from templates;
 - do not rewrite existing idea or review bodies;
-- rebuild an index only from front matter, titles, and latest same-ID reviews;
+- rebuild an index only from front matter, titles, and current accepted same-ID reviews;
 - rebuild `BUSTED.md` only from reviews with a busted verdict;
+- rebuild a branch brief only from the current accepted review and preserve its source review and
+  evidence revision;
+- ignore draft and superseded reviews as evidence-state sources;
+- treat legacy reviews without `review_status` as history, not implicitly accepted; establish a
+  source through a new validated `VERIFY`;
 - preserve identifiers and history;
 - report ambiguity instead of guessing status.

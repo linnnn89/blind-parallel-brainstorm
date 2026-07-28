@@ -14,7 +14,7 @@ context boundaries:
 
 - root creation sees only a shared brief and title-only root index;
 - verification reads one selected idea and its own review history;
-- child creation reads a reviewed branch brief instead of the parent's raw draft;
+- child creation reads a state-checked branch brief instead of the parent's raw draft;
 - sibling idea bodies remain hidden;
 - failed structures are remembered through compact busted signatures, not full failed narratives;
 - brainstorm content stays outside the main project until explicit promotion.
@@ -53,6 +53,19 @@ instructions still control the next operation.
 Once viable roots exist, generic continuation should prefer vertical development over endlessly
 adding more roots.
 
+## Evidence-state control
+
+Evidence maturity advances without skipping:
+
+```text
+speculative -> screened -> verified -> synthesis_ready -> protocol_ready
+```
+
+Only the current accepted review publishes evidence state. A branch brief records that review and
+revision; `CREATE CHILD` stops on stale or mismatched state. Immature evidence, uncertain novelty,
+or a small evidence pool produces a user-confirmable warning rather than an automatic rejection.
+The research evidence gate can freeze a branch without deleting it.
+
 ## Busted ideas
 
 A clearly invalid idea keeps its stable file path but is displayed in indexes as
@@ -81,6 +94,7 @@ references/
 templates/brainstorm/
   AGENTS.md
   BRIEF.md
+  EVIDENCE_GATE.md
   ROOT_INDEX.md
   BUSTED.md
   idea.md
@@ -97,7 +111,9 @@ operation.
 
 - No recursive brainstorm-directory reads.
 - No sibling-body reads during creation or verification.
-- Original ideas are immutable; reviews and busted records are append-only.
+- Original ideas are immutable; accepted review bodies and busted records preserve history.
+- Draft and superseded reviews cannot publish evidence state.
+- Stale or source-mismatched branch briefs cannot create children.
 - Busted labels never rename the underlying idea files.
 - Coherence and confident language are not evidence.
 - `survives` means worth retaining, not confirmed.

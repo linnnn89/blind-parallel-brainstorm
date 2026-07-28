@@ -7,33 +7,50 @@ Read this file only for `VERIFY <idea-id>`.
 - `brainstorm/AGENTS.md`
 - `brainstorm/BRIEF.md`
 - `brainstorm/ideas/<idea-id>.md`
-- existing reviews for the same ID
 - the title-only index row that owns the selected ID
 - project files or external sources needed to test this idea
 
-Do not read sibling or cousin idea bodies, unrelated reviews, or unrelated branch briefs.
+Before the source-first assessment, inspect same-ID review filenames and front matter only to
+resolve the current accepted review and evidence state. Do not read prior review bodies until the
+Review A checkpoint has been recorded in the new draft.
+
+After Review A, read prior same-ID review bodies for a bounded challenge pass. Do not read sibling
+or cousin idea bodies, unrelated reviews, or unrelated branch briefs.
 Read `BUSTED.md` only after reaching a provisional verdict, and only when the verdict may be
 `busted` or when checking whether the same failure is already recorded.
 
 ## Review sequence
 
 1. Confirm that the requested ID exists.
-2. Read the idea neutrally and separate its core proposition from persuasive wording.
-3. Identify required assumptions and logical dependencies.
-4. Check compatibility with confirmed facts in the brief.
-5. Seek evidence that supports the idea.
-6. Deliberately seek counterevidence and simpler explanations.
-7. Derive at least one prediction that differs from the baseline explanation.
-8. State a result that would weaken or falsify the idea.
-9. Recommend the lowest-cost, highest-information next test.
-10. Assign one provisional verdict.
-11. Write one append-only review file.
-12. Update only the selected row's label, idea status, and expansion status in `ROOT_INDEX.md` or
-    the appropriate parent `child_indexes/<parent-id>.md`.
-13. If the verdict is `busted`, append one compact failure record to `BUSTED.md`.
+2. Resolve the current accepted review from same-ID review front matter. Ignore drafts and
+   superseded reviews as state sources.
+3. Create the next review as `draft`; it cannot update any current-state artifact.
+4. Review A, source-first:
+   - restate the idea neutrally;
+   - identify assumptions and logical dependencies;
+   - seek supporting evidence, counterevidence, and simpler explanations;
+   - complete a compact evidence checkpoint and provisional gate assessment;
+   - record a provisional verdict without reading prior review bodies.
+5. Review B, challenge pass:
+   - read prior same-ID reviews;
+   - inspect disagreements, unsupported inherited claims, and changed evidence;
+   - run only necessary follow-up checks.
+6. Adjudicate retained, corrected, and unresolved claims. Select a one-step upgrade, same-state
+   refresh, or evidence-driven downgrade.
+7. Complete and validate all transition, provenance, confidence, gate, blocker, and reopen
+   metadata.
+8. If valid, accept the new review, link it to the previous accepted review, and mark the previous
+   review `superseded` by changing lifecycle metadata only.
+9. Update the selected index row. For a viable branch, regenerate the whole brief from the
+   accepted review and compare source, revision, state, gate, and evidence checkpoint.
+10. For `busted`, append one compact failure record to `BUSTED.md`.
 
 Do not modify the original idea front matter. The immutable idea records creation-time state;
-the index and latest review record current state.
+the index records lifecycle display state and the current accepted review records evidence state.
+
+If interrupted before acceptance, leave the new review as `draft`; it has no state effect. If
+state artifacts do not agree after acceptance, report a hard validation block and do not permit
+branching.
 
 ## Verdict rules
 
@@ -90,13 +107,17 @@ None of these verdicts means confirmed truth.
 
 Create or update `branch_briefs/<idea-id>.md` only when:
 
+- the new review is `accepted`;
 - verdict is `survives` or `weakened`;
 - the core proposition can be stated without advocacy;
 - unresolved dimensions are concrete;
 - further conceptual branching can add information.
 
-The branch brief contains only:
+Replace the whole branch brief from the accepted review. It contains only:
 
+- source review path and evidence revision;
+- current evidence state, confidence, verification date, gate decision, and blocker;
+- the accepted review's compact evidence checkpoint;
 - neutral core proposition;
 - inherited assumptions allowed for child work;
 - known weaknesses;
@@ -112,6 +133,9 @@ template. If the verdict closes or freezes expansion, reflect that state in the 
 index.
 
 ## Review independence
+
+Review A and Review B are sequential passes by one agent, not independent reviewers. This reduces
+anchoring but does not establish blindness. Do not claim multi-agent or independent replication.
 
 Do not reward confidence, eloquence, length, or novelty claims. Internal consistency may improve
 coherence assessment, but only external evidence may improve evidence support.

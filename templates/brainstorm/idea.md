@@ -4,6 +4,12 @@ parent_id: null
 title: ""
 idea_status: unreviewed
 expansion_status: closed
+evidence_state: speculative
+evidence_revision: 0
+state_source: creation
+confidence: low
+last_verified: null
+blocking_issue: null
 creation_mode: root|child
 expansion_axis: null
 created_at: YYYY-MM-DD
