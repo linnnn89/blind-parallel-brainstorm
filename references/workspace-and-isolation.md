@@ -11,10 +11,11 @@ operations.
 
 1. Confirm the target project root.
 2. Create `brainstorm/` and its subdirectories.
-3. Copy the workspace templates from `templates/brainstorm/`.
+3. Copy the workspace templates from `templates/brainstorm/`, including `BUSTED.md`.
 4. Fill `BRIEF.md` from user-approved facts and constraints only.
-5. Leave indexes empty except for their headers.
-6. Do not import old proposals, rankings, or preferred solutions into the brief.
+5. Leave indexes and `BUSTED.md` empty except for their headers and instructions.
+6. Do not import old proposals, rankings, preferred solutions, or undocumented failures into the
+   brief or busted ledger.
 7. Complete the requested create or verify operation.
 
 ## Shared context boundary
@@ -40,7 +41,8 @@ It must not contain:
 
 Indexes expose only:
 
-- identifier;
+- stable identifier;
+- display label, including `BUSTED.<id>` when applicable;
 - short title;
 - idea status;
 - expansion status;
@@ -48,6 +50,19 @@ Indexes expose only:
 - child count.
 
 Do not include abstracts, mechanisms, predictions, review conclusions, or evidence excerpts.
+
+## Busted ledger boundary
+
+`BUSTED.md` exposes only compact negative memory:
+
+- ID and title;
+- failure class;
+- one-sentence reason;
+- short collision signatures;
+- applicable scope.
+
+Detailed failure analysis remains in the selected idea's review file. CREATE operations must not
+read the ledger before producing their initial candidate draft.
 
 ## Project-side quarantine
 
@@ -63,6 +78,7 @@ If files are missing:
 
 - recreate structural files from templates;
 - do not rewrite existing idea or review bodies;
-- rebuild an index only from front matter and titles, without copying body text;
+- rebuild an index only from front matter, titles, and latest same-ID reviews;
+- rebuild `BUSTED.md` only from reviews with a busted verdict;
 - preserve identifiers and history;
-- report any ambiguity instead of guessing status.
+- report ambiguity instead of guessing status.
