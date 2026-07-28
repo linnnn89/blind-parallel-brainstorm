@@ -1,7 +1,7 @@
 ---
 idea_id: "NNN"
 review_id: "001"
-verdict: survives|weakened|rejected|blocked
+verdict: survives|weakened|blocked|busted
 reviewed_at: YYYY-MM-DD
 review_scope: internal|evidence|implementation|mixed
 ---
@@ -38,7 +38,7 @@ review_scope: internal|evidence|implementation|mixed
 
 # Falsification or failure conditions
 
-- [Result that would clearly weaken or reject the idea.]
+- [Result that would clearly weaken or bust the idea.]
 
 # Highest-information next test
 
@@ -46,11 +46,21 @@ review_scope: internal|evidence|implementation|mixed
 
 # Verdict
 
-- Decision: `survives|weakened|rejected|blocked`
+- Decision: `survives|weakened|blocked|busted`
 - Reason: [Concise reason.]
 - Expansion recommendation: `open|closed|frozen|saturated`
 - Remaining uncertainty: [What is still unresolved?]
 
+## Busted ledger metadata
+
+Complete this section only when the verdict is `busted`.
+
+- Failure class: `contradicts-facts|duplicate|no-new-information|non-falsifiable|unsupported-causal-leap|scope-violation|implementation-impossible`
+- Collision signatures:
+  - [Short structural signature.]
+- Scope: `global|root:NNN|parent:NNN-01`
+
 ---
 
-A verdict of `survives` means worth retaining, not confirmed truth.
+A verdict of `survives` means worth retaining, not confirmed truth. Detailed reasoning stays in
+this review; `BUSTED.md` receives only the compact busted metadata.

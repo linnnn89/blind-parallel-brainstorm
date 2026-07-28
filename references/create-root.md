@@ -2,7 +2,7 @@
 
 Read this file only for `CREATE ROOT`.
 
-## Allowed reads
+## Allowed reads before drafting
 
 - `brainstorm/AGENTS.md`
 - `brainstorm/BRIEF.md`
@@ -10,24 +10,47 @@ Read this file only for `CREATE ROOT`.
 - active root reservations, title only
 
 Do not read any file under `ideas/`, `reviews/`, `branch_briefs/`, or `child_indexes/`.
+Do not read `BUSTED.md` before producing the initial candidate draft.
 
 ## Procedure
 
 1. Restate the problem internally from `BRIEF.md` without importing outside proposals.
 2. Scan root titles only to avoid direct title conflict.
 3. Choose one meaningfully distinct direction.
-4. Reserve the next three-digit root ID when concurrency is possible.
-5. Write exactly one `ideas/NNN.md` from the idea template.
-6. Append one title-only row to `ROOT_INDEX.md`.
-7. Remove the reservation and stop.
+4. Draft the candidate without reading prior failed-idea records.
+5. Read the compact entries in `BUSTED.md` and compare the draft against their failure
+   signatures.
+6. If the core proposition, mechanism, differentiating prediction, or failure pattern collides,
+   discard the draft and retry at most twice.
+7. Reserve the next three-digit root ID when concurrency is possible.
+8. Write exactly one `ideas/NNN.md` from the idea template.
+9. Append one title-only row to `ROOT_INDEX.md` with an empty label, `unreviewed` idea status,
+   and `closed` expansion status.
+10. Remove the reservation and stop.
+
+If all three drafts collide with known busted signatures, write no idea and report the collision.
 
 ## Distinctness rule
 
-A title conflict exists when the new direction has the same core proposition as an indexed
-root, even if phrased differently.
+A title conflict exists when the new direction has the same core proposition as an indexed root,
+even if phrased differently.
 
-A title similarity alone does not justify reading the existing idea body. Either choose another
-direction or report that a comparison requires a separate, explicitly authorized synthesis.
+A candidate is also a duplicate when its mechanism, differentiating prediction, and practical
+validation route are materially the same as an indexed direction.
+
+Title similarity alone does not justify reading an existing idea body. Choose another direction
+or report that comparison requires an explicitly authorized synthesis.
+
+## Validation advisory
+
+After creating the root, inspect title-only lifecycle counts. Recommend `VERIFY` when any default
+threshold is reached:
+
+- 6 unreviewed roots;
+- 8 total active unreviewed ideas;
+- at least 3 meaningfully different mechanisms or analysis axes already exist.
+
+The advisory does not block an explicitly requested new root.
 
 ## Generation guidance
 
