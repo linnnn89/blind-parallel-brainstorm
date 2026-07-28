@@ -2,16 +2,18 @@
 
 ## Problem
 
-Long-running brainstorming systems tend to converge too early toward the first plausible explanation.
+Long-running brainstorming tends to converge toward early plausible explanations or repeatedly
+rediscover already failed structures.
 
-## Rules
+## Independent generation rules
 
 During CREATE operations:
 
 - preserve independent generation;
 - do not rank ideas before generation is complete;
 - do not merge merely because wording is similar;
-- distinguish semantic similarity from mechanism similarity.
+- distinguish semantic similarity from mechanism similarity;
+- do not read the busted ledger before the initial candidate draft.
 
 ## Tail exploration operators
 
@@ -37,11 +39,34 @@ A candidate is not meaningfully different if it only changes:
 
 Prefer differences in:
 
-- causal structure;
+- causal or implementation structure;
 - assumptions;
 - predictions;
-- validation methods.
+- validation methods;
+- boundary conditions.
+
+## Post-draft busted collision check
+
+After drafting, compare the candidate with the compact signatures in `BUSTED.md`.
+
+A collision exists when the candidate repeats the same failed:
+
+- core proposition;
+- mechanism;
+- differentiating prediction;
+- or structural failure pattern within the applicable scope.
+
+Discard a colliding draft and retry at most twice. Do not read detailed busted reviews merely to
+avoid a repeat; the compact ledger should be sufficient.
+
+## Exploration cadence
+
+Once the pool reaches its validation advisory threshold, recommend verification before further
+horizontal generation. After viable nodes exist, prefer vertical development of reviewed branches
+over endlessly adding roots.
 
 ## Stopping exploration
 
-Do not continue branching because more branches are possible. Stop or freeze a branch when additional children no longer add new mechanisms, predictions, tests, or boundary conditions.
+Do not continue because more branches are imaginable. Freeze or saturate a branch when additional
+children no longer add mechanisms, predictions, tests, boundaries, implementations, or repairs,
+or when the next useful step requires evidence rather than more ideation.
