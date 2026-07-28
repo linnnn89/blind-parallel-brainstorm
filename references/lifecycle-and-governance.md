@@ -5,7 +5,7 @@ handling busted memory, or promoting an idea.
 
 ## Idea status
 
-- `unreviewed`: created but not independently assessed;
+- `unreviewed`: created but not assessed;
 - `survives`: worth retaining after the current review;
 - `weakened`: partially viable, usually requiring repair or narrower scope;
 - `blocked`: cannot be judged with currently accessible evidence or tools;
@@ -20,6 +20,86 @@ handling busted memory, or promoting an idea.
 
 Status and expansion status are independent. A viable idea can be saturated; a blocked idea is
 normally frozen.
+
+## Review lifecycle and current-state source
+
+Review lifecycle is:
+
+```text
+draft -> accepted -> superseded
+draft ------------> superseded
+```
+
+- `draft` may be completed or corrected but cannot update current evidence state, indexes, or a
+  branch brief.
+- `accepted` has passed the review, transition, and evidence-gate checks.
+- `superseded` remains as history but cannot publish current state.
+
+The current evidence-state source is the highest numbered same-ID review whose
+`review_status` is `accepted`. Its `review_id` must be unique and monotonically increasing. When a
+new review is accepted, set the previous accepted review's lifecycle metadata to `superseded` and
+link the two with `supersedes_review` and `superseded_by`. Review bodies become immutable once
+accepted; only these lifecycle fields may change afterward.
+
+If no accepted review exists, the immutable idea front matter is the source and its evidence state
+is `speculative`. Draft and superseded reviews never override it. Multiple unlinked accepted
+reviews, duplicate review IDs, or an accepted review whose predecessor is not identified are
+invalid lifecycle metadata and block branching.
+
+## Evidence state
+
+Evidence state records maturity, not whether the idea is favorable:
+
+```text
+speculative -> screened -> verified -> synthesis_ready -> protocol_ready
+```
+
+Upgrades may advance only one step per accepted review. Synthesis or user approval may satisfy a
+transition condition but cannot publish state by itself. Do not infer or skip an intermediate
+state even when one review appears comprehensive.
+
+Minimum conditions:
+
+### `speculative -> screened`
+
+- the question and evidence boundary are explicit;
+- a targeted eligibility and novelty screen has been performed;
+- supporting evidence, counterevidence, unknowns, and blockers are recorded;
+- quantity, quality, novelty, and feasibility each have a concise gate assessment;
+- a compact evidence checkpoint identifies every claim allowed into a branch brief.
+
+### `screened -> verified`
+
+- state-bearing claims have been checked against primary, full-text, registry, dataset, or other
+  authoritative sources appropriate to the domain;
+- eligibility, extractability, duplicates, and material contradictions have been resolved or
+  explicitly marked unresolved;
+- the evidence checkpoint supplies source references and confidence for each inherited claim;
+- the evidence gate and required review metadata are complete.
+
+Verification may show that an idea should freeze or be busted. Evidence maturity does not imply a
+positive verdict.
+
+### `verified -> synthesis_ready`
+
+- an authorized synthesis has been completed for the selected scope;
+- the idea is `survives` or explicitly qualified `weakened`;
+- the research gate decision is `continue`;
+- decisive evidence, counterevidence, uncertainty, and alternatives are current;
+- no unresolved blocking issue prevents comparison or synthesis;
+- further useful work is synthesis rather than more exploratory children.
+
+### `synthesis_ready -> protocol_ready`
+
+- the user explicitly approves the named idea for protocol preparation;
+- the synthesis has fixed the research scope, primary question, evidence boundary, and
+  major feasibility assumptions;
+- remaining uncertainties and reopen conditions are visible;
+- the research gate remains `continue` and the promotion boundary is satisfied.
+
+A same-state accepted review is a refresh and must increment `evidence_revision`. An accepted
+review may downgrade evidence state when new evidence invalidates earlier support, but it must name
+the new evidence and reason. `protocol_ready` is never automatic.
 
 ## Default transitions
 
@@ -62,6 +142,19 @@ use this priority:
 3. recommend another `CREATE ROOT` only for an uncovered direction or explicit request.
 
 Name at most three suggested IDs so the user retains control without receiving a long queue.
+
+## Research kill gate
+
+Use `EVIDENCE_GATE.md` to assess quantity, quality, novelty, feasibility, and blockers without a
+weighted score. A stop-level `fail` should freeze expansion, not delete or automatically bust the
+idea. Record `blocking_issue` and `reopen_condition`; only a new accepted review may publish a
+reopened state.
+
+## CREATE CHILD state-integrity gate
+
+Apply the hard blocks and soft warnings defined in `create-child.md`. Hard state-integrity blocks
+are not user-overridable. Soft warnings require one explicit confirmation naming the parent and
+warning codes and do not mutate lifecycle state.
 
 ## Busted memory
 
@@ -125,10 +218,13 @@ Mark a node `saturated` when one or more conditions hold:
 ## Immutability
 
 - idea bodies are immutable;
-- reviews are append-only;
+- review bodies are editable only while `draft` and immutable after acceptance;
+- accepted review lifecycle metadata may change only from `accepted` to `superseded`, with a
+  forward link to the replacing review;
 - indexes may update label and status fields but may not gain body summaries;
 - `BUSTED.md` is append-only except to correct a factual clerical error;
-- branch briefs may be replaced by later verification while preserving neutral scope;
+- branch briefs may be replaced only from the current accepted review while preserving neutral
+  scope and provenance;
 - promotion creates a new reviewed summary outside `brainstorm/`; it does not move or rewrite
   the source idea.
 
@@ -138,11 +234,12 @@ Promotion requires explicit user approval naming the idea ID.
 
 Before promotion, verify:
 
-1. at least one review exists;
+1. a current accepted review exists;
 2. status is `survives` or qualified `weakened`;
-3. important counterevidence is visible;
-4. the destination labels the content appropriately;
-5. only the selected idea is exported.
+3. evidence state is `synthesis_ready` or `protocol_ready`;
+4. important counterevidence is visible;
+5. the destination labels the content appropriately;
+6. only the selected idea is exported.
 
 The promoted summary contains the proposition, evidence state, remaining uncertainty, and
 recommended next test. It must not silently become a project requirement or established fact.

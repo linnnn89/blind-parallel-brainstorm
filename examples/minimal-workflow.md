@@ -36,8 +36,10 @@ Run:
 VERIFY 001
 ```
 
-The verifier reads only `001.md`, its own review history, the common brief, and relevant evidence.
-If the idea survives, it creates a neutral `branch_briefs/001.md`.
+The verifier completes a source-first Review A before reading prior review bodies, then performs a
+bounded Review B challenge and adjudication. It starts the new review as `draft`. Only an
+`accepted` review may publish the next one-step evidence state and generate
+`branch_briefs/001.md`.
 
 ## 4. Record a busted direction without renaming its file
 
@@ -65,7 +67,20 @@ Run:
 CREATE CHILD 001
 ```
 
-The child creator reads the branch brief and child title index, but not `001.md` or sibling
+Before drafting, the child creator compares the branch brief with the current accepted review.
+For example, if `review-002.md` is accepted but the brief still cites `review-001.md`, it stops
+without writing:
+
+```text
+HARD BLOCK: SOURCE_REVIEW_MISMATCH
+```
+
+If the source ID matches but a checkpoint value differs, it stops with
+`STALE_BRANCH_BRIEF`.
+
+After the brief is regenerated from the accepted review, `screened` evidence or uncertain novelty
+produces one grouped warning. The user must explicitly confirm parent `001` and the warning codes.
+The child creator then reads the validated brief and child title index, but not `001.md` or sibling
 bodies. It may create:
 
 ```text
@@ -93,6 +108,7 @@ is a longitudinal dataset, simulation, implementation test, or experiment.
 
 ## 8. Promote only by explicit user choice
 
-A reviewed idea enters the main project only after the user names its ID and approves promotion.
-The exported text remains labeled as a hypothesis or proposal unless external evidence supports
-stronger wording.
+An idea reaches `synthesis_ready` and then `protocol_ready` only through one-step transitions in
+accepted reviews. It enters the main project only after the user names its ID and approves
+promotion. The exported text remains labeled as a hypothesis or proposal unless external evidence
+supports stronger wording.

@@ -12,7 +12,7 @@
 
 - 创建根构思时，只读取公共题目与仅含标题的根索引；
 - 验证时，只读取被点名的一个编号及其自身历史验证；
-- 创建子构思时，只继承经验证生成的 `branch brief`，不读取父节点原始正文；
+- 创建子构思时，只继承通过状态一致性检查的 `branch brief`，不读取父节点原始正文；
 - 兄弟节点彼此只看到标题，不看到具体内容；
 - 已失败结构只通过压缩的废案签名保留，不把完整失败论证塞回创造上下文；
 - 用户明确批准前，所有构思都隔离在主项目之外。
@@ -53,6 +53,16 @@ SYNTHESIZE 001
 
 当已经存在可行根节点时，普通的“继续头脑风暴”应优先建议验证或沿有效节点纵向深化，而不是无限增加根构思。
 
+## 证据状态控制
+
+证据成熟度必须逐级推进：
+
+```text
+speculative -> screened -> verified -> synthesis_ready -> protocol_ready
+```
+
+只有当前 `accepted` review 可以发布证据状态。branch brief 必须记录其来源 review 和证据版本；状态陈旧或来源不一致时，`CREATE CHILD` 必须停止。证据尚不成熟、新颖性不确定或证据池较小时，只产生需要用户确认的警告，不自动淘汰方向。科研证据闸门可以冻结分支，但不会删除它。
+
 ## 废案机制
 
 明显不成立的构思保留稳定文件路径，但在索引中显示为：
@@ -84,6 +94,7 @@ references/
 templates/brainstorm/
   AGENTS.md
   BRIEF.md
+  EVIDENCE_GATE.md
   ROOT_INDEX.md
   BUSTED.md
   idea.md
@@ -99,7 +110,9 @@ templates/brainstorm/
 
 - 禁止递归读取整个 `brainstorm/`；
 - 创建或验证时禁止读取兄弟节点正文；
-- 原始构思创建后不可修改，验证记录和废案账本只能追加；
+- 原始构思不可修改，accepted review 正文和废案历史必须保留；
+- draft 与 superseded review 不得发布证据状态；
+- 陈旧或来源不匹配的 branch brief 不得创建子构思；
 - `BUSTED` 只是索引显示标签，不重命名原构思文件；
 - 逻辑自洽、语言自信和听起来新颖都不等于证据；
 - `survives` 仅表示当前值得保留，不表示已证实；

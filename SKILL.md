@@ -21,7 +21,7 @@ The skill uses file-level context isolation:
 
 - root ideas see a shared brief and title-only index, not other idea bodies;
 - verification reads one numbered idea at a time;
-- child ideas inherit a reviewed branch brief, not the parent's raw draft;
+- child ideas inherit a state-checked branch brief, not the parent's raw draft;
 - clearly invalid ideas are labeled `BUSTED.<id>` in indexes while their file paths remain stable;
 - speculative content stays quarantined until the user explicitly promotes it.
 
@@ -59,10 +59,13 @@ Uncertainty does not authorize brainstorming. Activation belongs to the user.
 6. `CREATE ROOT` must not read idea or review bodies before drafting its candidate.
 7. `CREATE CHILD` must not read the parent's raw idea, sibling bodies, or unrelated branches.
 8. `VERIFY` must not read other idea bodies.
-9. Original idea files are immutable; reviews are append-only.
+9. Original idea files are immutable. Accepted review bodies are immutable; only review lifecycle
+   metadata may move `draft -> accepted -> superseded`.
 10. Coherence, novelty, or confident language cannot establish truth.
 11. No brainstorm content enters the main project without explicit user approval naming the ID.
 12. Do not continue expanding in the background or without a new user invocation.
+13. Only the current accepted review may publish evidence state; never branch from a stale or
+    source-mismatched brief.
 
 ## Workspace layout
 
@@ -70,6 +73,7 @@ Uncertainty does not authorize brainstorming. Activation belongs to the user.
 brainstorm/
 ├── AGENTS.md
 ├── BRIEF.md
+├── EVIDENCE_GATE.md
 ├── ROOT_INDEX.md
 ├── BUSTED.md
 ├── ideas/
@@ -121,16 +125,11 @@ Write only a candidate that passes this check.
 
 ### VERIFY <idea-id>
 
-Read only:
+Assess the idea and evidence before reading prior review bodies, then perform a bounded challenge
+pass and adjudication.
 
-- `AGENTS.md`
-- `BRIEF.md`
-- `ideas/<idea-id>.md`
-- reviews for that same ID
-- its owning title-only index row
-- evidence strictly needed to test it
-
-Write one append-only review and update the selected index row.
+Start the review as `draft`. Only a validated `accepted` review may supersede the prior source and
+update current state.
 
 Allowed verdicts:
 
@@ -147,8 +146,12 @@ expansion closes, and a compact failure record is appended to `BUSTED.md`.
 Use only when the parent is `survives` or `weakened`, has a controlled branch brief, and has
 expansion status `open`.
 
-Read only the shared brief, the parent's branch brief, its direct-child title index, title-only
-ancestry, and reservations. Do not read the parent's raw idea or sibling bodies.
+Before drafting, compare the brief with the accepted review. Stop on stale state, source mismatch,
+invalid transition, or missing metadata. Immature evidence, uncertain novelty, or a small pool
+requires explicit user confirmation.
+
+After this preflight, read only the shared brief, branch brief, direct-child title index,
+title-only ancestry, and reservations. Do not read the parent's raw idea or sibling bodies.
 
 Draft one child first, then compare it with compact busted signatures and existing child titles.
 Retry at most twice on collision. The child must add a mechanism, prediction, test, boundary,
@@ -232,6 +235,17 @@ Expansion status:
 - `frozen`
 - `saturated`
 
+Evidence state:
+
+```text
+speculative -> screened -> verified -> synthesis_ready -> protocol_ready
+```
+
+Evidence state is independent of idea and expansion status. Only an accepted review may publish a
+one-step transition; synthesis or user approval may satisfy transition conditions but cannot
+change state by itself. See `references/lifecycle-and-governance.md` for minimum conditions,
+refreshes, and evidence-driven downgrades.
+
 Only `survives` and qualified `weakened` nodes may open vertical branches. `blocked` nodes freeze;
 `busted` nodes close permanently under the current evidence. Mark a branch saturated when
 further children add no new mechanism, prediction, test, boundary, implementation, or repair.
@@ -249,11 +263,12 @@ max_unreviewed_children_per_node: 3
 
 Promotion requires:
 
-1. at least one independent review;
+1. a current accepted review;
 2. status `survives` or explicitly qualified `weakened`;
-3. explicit user approval naming the ID;
-4. visible uncertainty and counterevidence;
-5. a concise copy into the main project, still labeled as hypothesis or proposal unless external
+3. evidence state `synthesis_ready` or `protocol_ready`;
+4. explicit user approval naming the ID;
+5. visible uncertainty and counterevidence;
+6. a concise copy into the main project, still labeled as hypothesis or proposal unless external
    evidence supports a stronger statement.
 
 Never link the main project to the entire brainstorm forest.
@@ -264,7 +279,7 @@ After each operation, report only:
 
 - operation performed;
 - file created or reviewed;
-- resulting idea and expansion status, when applicable;
+- resulting idea, evidence, and expansion status, when applicable;
 - whether a validation advisory was triggered;
 - the next user-directed action.
 

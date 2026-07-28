@@ -18,16 +18,25 @@ This directory is an isolated speculative workspace.
    row, and evidence required to test it.
 7. Never treat brainstorm content as established project fact.
 8. Never modify an original idea body after creation.
-9. Never create and verify an idea in the same run.
-10. One create run produces exactly one idea file.
-11. A busted idea keeps its stable path, is displayed as `BUSTED.<id>` in its index, and cannot
+9. Only the current accepted same-ID review may publish evidence state. Draft and superseded
+   reviews are history.
+10. Accepted review bodies are immutable. Only lifecycle metadata may move
+    `draft -> accepted -> superseded`.
+11. Before `CREATE CHILD`, compare the branch brief with the current accepted review's source,
+    evidence revision, state, required metadata, and compact evidence checkpoint.
+12. Stale state, source mismatch, invalid transition, or missing metadata is a hard block.
+13. Immature evidence, uncertain novelty, or a small evidence pool requires explicit user
+    confirmation naming the parent and warnings.
+14. Never create and verify an idea in the same run.
+15. One create run produces exactly one idea file.
+16. A busted idea keeps its stable path, is displayed as `BUSTED.<id>` in its index, and cannot
     branch under current evidence.
-12. When validation thresholds are reached, recommend verification; do not silently continue
+17. When validation thresholds are reached, recommend verification; do not silently continue
     horizontal expansion on a generic request.
-13. Prefer vertical development of `survives` or qualified `weakened` nodes once viable roots
+18. Prefer vertical development of `survives` or qualified `weakened` nodes once viable roots
     exist.
-14. Never write brainstorm content into the main project without explicit user approval naming
+19. Never write brainstorm content into the main project without explicit user approval naming
     the selected idea.
-15. Do not expose private chain-of-thought. Record concise assumptions, mechanisms, predictions,
+20. Do not expose private chain-of-thought. Record concise assumptions, mechanisms, predictions,
     falsifiers, evidence, and decisions only.
-16. When a requested action violates isolation, stop and report the conflict.
+21. When a requested action violates isolation, stop and report the conflict.

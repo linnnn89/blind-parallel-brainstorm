@@ -9,11 +9,45 @@ Proceed only when:
 - `branch_briefs/<parent-id>.md` exists;
 - parent idea status is `survives` or `weakened`;
 - expansion status is `open`;
+- a current accepted review exists;
+- evidence state is `screened` or `verified`;
 - child depth and count remain within configured limits;
 - the parent has fewer than 3 unreviewed direct children, unless the user explicitly overrides
   the validation advisory.
 
-## Allowed reads before drafting
+## State-integrity preflight
+
+Before drafting, read only:
+
+- same-ID review filenames and front matter;
+- the current accepted review's compact evidence checkpoint and evidence-gate table;
+- `brainstorm/branch_briefs/<parent-id>.md`;
+- the owning title-only index row.
+
+Resolve the current accepted review as defined in the lifecycle manual. Compare it with the branch
+brief.
+
+Hard blocks stop without writing and cannot be overridden:
+
+| Code | Trigger |
+|---|---|
+| `STALE_BRANCH_BRIEF` | Revision, time, gate, or checkpoint is stale |
+| `SOURCE_REVIEW_MISMATCH` | Brief does not cite the current accepted review |
+| `INVALID_STATE_TRANSITION` | Evidence/review lifecycle is invalid or not branchable |
+| `MISSING_REQUIRED_METADATA` | Required state, source, confidence, date, gate, blocker, or reopen field is absent |
+
+Soft warnings:
+
+| Code | Trigger |
+|---|---|
+| `EVIDENCE_IMMATURE` | Evidence state is `screened` |
+| `NOVELTY_UNCERTAIN` | Novelty is `concern` or `unknown` |
+| `EVIDENCE_POOL_SMALL` | Evidence quantity is `concern` |
+
+Group soft warnings into one `USER_CONFIRMATION_REQUIRED`. Proceed only when the user explicitly
+confirms the parent ID and warning codes, including when confirmation is already in the request.
+
+## Allowed reads after preflight
 
 - `brainstorm/AGENTS.md`
 - `brainstorm/BRIEF.md`
@@ -27,19 +61,20 @@ Do not read `BUSTED.md` before producing the initial child draft.
 
 ## Procedure
 
-1. Read the parent's controlled branch brief.
-2. Select one unresolved expansion question or allowed axis.
-3. Scan direct-child titles to avoid a duplicate proposition.
-4. Confirm that the proposed child preserves the parent's core proposition.
-5. Draft one candidate child.
-6. Read compact `BUSTED.md` entries whose scope is global or applies to this root or parent.
-7. Compare the draft against busted propositions, mechanisms, predictions, and failure
+1. Complete the state-integrity preflight and any required soft-warning confirmation.
+2. Read the parent's controlled branch brief.
+3. Select one unresolved expansion question or allowed axis.
+4. Scan direct-child titles to avoid a duplicate proposition.
+5. Confirm that the proposed child preserves the parent's core proposition.
+6. Draft one candidate child.
+7. Read compact `BUSTED.md` entries whose scope is global or applies to this root or parent.
+8. Compare the draft against busted propositions, mechanisms, predictions, and failure
    signatures. Discard and retry at most twice on collision.
-8. Reserve the next child ID when concurrency is possible.
-9. Write exactly one `ideas/<child-id>.md`.
-10. Append one title-only row to `child_indexes/<parent-id>.md` with an empty label,
+9. Reserve the next child ID when concurrency is possible.
+10. Write exactly one `ideas/<child-id>.md` with evidence state `speculative` and revision `0`.
+11. Append one title-only row to `child_indexes/<parent-id>.md` with an empty label,
     `unreviewed` idea status, and `closed` expansion status.
-11. Remove the reservation and stop.
+12. Remove the reservation and stop.
 
 If all three drafts collide with busted signatures, write no child and report the collision.
 
