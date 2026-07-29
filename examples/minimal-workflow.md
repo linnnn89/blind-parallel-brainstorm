@@ -25,6 +25,18 @@ Possible title-only index:
 
 The agents that created 002 and 003 did not read 001's body.
 
+## 2a. Archive a candidate stopped before formal creation
+
+Suppose `BRIEF.md` defines a pre-create feasibility gate and a drafted candidate clearly fails it
+after one bounded source check. Append a record such as `ES-20260729-01` to `EARLY_STOPS.md` with
+the candidate scope, evidence locator, uncertainty, and reopen condition. Do not create an idea
+file or root-index row for that candidate.
+
+A source-checked early stop can warn a later post-draft collision, but it cannot automatically
+bust the new candidate. An unverified worker finding is archival only. If the user later names
+`ES-20260729-01` for reconsideration, a normal `CREATE ROOT` run explains why the blocker may no
+longer apply and writes the archive ID to `origin_early_stop` in the new idea.
+
 ## 3. Switch to verification before the pool becomes cluttered
 
 When the default threshold is reached, the skill recommends `VERIFY` rather than silently adding

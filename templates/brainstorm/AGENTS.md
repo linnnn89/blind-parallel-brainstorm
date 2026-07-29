@@ -1,5 +1,5 @@
 ---
-brainstorm_schema_version: 2
+brainstorm_schema_version: 3
 ---
 
 # Brainstorm Isolation Rules
@@ -16,8 +16,7 @@ This directory is an isolated speculative workspace.
    title-only reservations.
 4. `CREATE CHILD` may initially read only the selected parent's branch brief, direct-child title
    index, shared brief, title-only ancestry, and reservations.
-5. CREATE operations must draft before reading `BUSTED.md`; the ledger is used only for a
-   post-draft collision check.
+5. CREATE must draft before post-draft checks in `BUSTED.md` or `EARLY_STOPS.md`.
 6. `VERIFY` may read only the selected idea, reviews for that same ID, the shared brief, its index
    row, and evidence required to test it.
 7. Never treat brainstorm content as established project fact.
@@ -32,19 +31,23 @@ This directory is an isolated speculative workspace.
 13. Immature evidence, uncertain novelty, or a small evidence pool requires explicit user
     confirmation naming the parent and warnings.
 14. Never create and verify an idea in the same run.
-15. One create run produces exactly one idea file.
-16. A busted idea keeps its stable path, is displayed as `BUSTED.<id>` in its index, and cannot
+15. A successful CREATE writes one idea; an `ES-*` early stop gets no idea or index row.
+16. Early stops are not busted verdicts or evidence sources. Only source-checked records warn;
+    unverified records are archival.
+17. A busted idea keeps its stable path, is displayed as `BUSTED.<id>` in its index, and cannot
     branch under current evidence.
-17. When validation thresholds are reached, recommend verification; do not silently continue
+18. When validation thresholds are reached, recommend verification; do not silently continue
     horizontal expansion on a generic request.
-18. Prefer vertical development of `survives` or qualified `weakened` nodes once viable roots
+19. Prefer vertical development of `survives` or qualified `weakened` nodes once viable roots
     exist.
-19. Never write brainstorm content into the main project without explicit user approval naming
+20. Never write brainstorm content into the main project without explicit user approval naming
     the selected idea.
-20. Do not expose private chain-of-thought. Record concise assumptions, mechanisms, predictions,
+21. Do not expose private chain-of-thought. Record concise assumptions, mechanisms, predictions,
     falsifiers, evidence, and decisions only.
-21. When a requested action violates isolation, stop and report the conflict.
-22. A concurrent worker may be terminated for a clear scope or protocol violation, not merely for
+22. When a requested action violates isolation, stop and report the conflict.
+23. A concurrent worker may be terminated for a clear scope or protocol violation, not merely for
     a weak or unconventional hypothesis. Preserve incomplete reviews as `draft`; if create or
     accepted-review artifacts are partially published, use the deterministic repair rules and
     never demote accepted evidence or guess missing content.
+24. Workers return early-stop findings; the coordinator validates, assigns IDs, and appends
+    serially.
