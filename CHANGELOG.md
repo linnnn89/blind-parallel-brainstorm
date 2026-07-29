@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+### Early-stop archive
+
+- add schema 3 and an append-only `EARLY_STOPS.md` for coherent candidates stopped before formal
+  idea creation;
+- separate pre-create `early_stop` records from accepted-review `busted` verdicts;
+- require evidence locators, uncertainty, and reopen conditions for source-checked early stops;
+- keep unverified worker findings archival and outside collision filtering;
+- support explicit user-directed reconsideration through idea provenance and append-only
+  resolution events without adding a new primary operation;
+- make the schema marker the final migration commit and check required-path existence;
+- use final-line record commit markers, ignore incomplete records, and hard-block duplicate IDs;
+- append resolution events so reconsidered early stops do not remain active warnings;
+- separate research eligibility failures from worker protocol failures.
+
 ### Real-run guardrails
 
 - check the managed workspace schema without loading the repair manual on a match, and require

@@ -57,7 +57,11 @@ confirms the parent ID and warning codes, including when confirmation is already
 - active reservations under the parent, title only
 
 Do not read the parent's raw idea, sibling bodies, sibling reviews, or unrelated branches.
-Do not read `BUSTED.md` before producing the initial child draft.
+Do not read `BUSTED.md` or `EARLY_STOPS.md` before producing the initial child draft.
+
+Exception: when the user explicitly asks to reconsider one named `ES-*` record under this parent,
+read only that entry after the state-integrity preflight. Its parent and scope must match, and the
+child must still preserve the parent's accepted core proposition.
 
 ## Procedure
 
@@ -69,14 +73,28 @@ Do not read `BUSTED.md` before producing the initial child draft.
 6. Draft one candidate child.
 7. Read compact `BUSTED.md` entries whose scope is global or applies to this root or parent.
 8. Compare the draft against busted propositions, mechanisms, predictions, and failure
-   signatures. Discard and retry at most twice on collision.
-9. Reserve the next child ID when concurrency is possible.
-10. Write exactly one `ideas/<child-id>.md` with evidence state `speculative` and revision `0`.
-11. Append one title-only row to `child_indexes/<parent-id>.md` with `Display` equal to the stable
+   signatures.
+9. Target only archive headings/IDs, titles, parent and scope, evidence basis, recorded date,
+   record status, signatures, reopen conditions, and matching resolution events. Only a unique,
+   complete, source-checked, unresolved applicable match warns; confirm its blocker still applies.
+10. Run one bounded post-draft screen only for a hard gate defined by the user or controlled
+    brief. Build a clear, traceable failure record in working memory and append it once as
+    `ES-YYYYMMDD-NN`, with `Record status: complete` last, before discarding. Do not duplicate a
+    match. If the archive append cannot commit, stop without discarding or retrying. Formalize
+    ambiguity for later `VERIFY`.
+11. Retry at most twice across all discarded attempts.
+12. Reserve the next child ID when concurrency is possible.
+13. Write exactly one `ideas/<child-id>.md` with evidence state `speculative` and revision `0`.
+    Set `origin_early_stop` and `origin_reopen_reason` only for an explicitly named originating
+    `ES-*` record.
+14. Append one title-only row to `child_indexes/<parent-id>.md` with `Display` equal to the stable
     ID, `unreviewed` idea status, and `closed` expansion status.
-12. Remove the reservation and stop.
+15. After both idea and index commit, append one complete `ER-YYYYMMDD-NN` resolution event for
+    an explicit early-stop reconsideration.
+16. Remove the reservation and stop.
 
-If all three drafts collide with busted signatures, write no child and report the collision.
+If all three drafts are discarded, write no child and report the busted collisions, existing
+early-stop IDs, and new early-stop IDs that caused the stop.
 
 ## Valid child relationships
 
@@ -112,5 +130,6 @@ criticism.
 
 ## Output limit
 
-Create one child only. Do not verify it, compare sibling bodies, synthesize the branch, or
-promote it in the same run.
+Create at most one child, three early-stop records, and one reconsideration resolution event.
+Early stops get no idea or index row. Do not verify, compare sibling bodies, synthesize, or
+promote in the same run.

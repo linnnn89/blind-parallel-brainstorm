@@ -22,6 +22,7 @@ The skill uses file-level context isolation:
 - root ideas see a shared brief and title-only index, not other idea bodies;
 - verification reads one numbered idea at a time;
 - child ideas inherit a state-checked branch brief, not the parent's raw draft;
+- candidates stopped before formal creation receive separate `ES-*` archive records;
 - clearly invalid ideas are labeled `BUSTED.<id>` in indexes while their file paths remain stable;
 - speculative content stays quarantined until the user explicitly promotes it.
 
@@ -49,16 +50,18 @@ Uncertainty does not authorize brainstorming. Activation belongs to the user.
 
 1. Treat `brainstorm/` as speculative quarantine, not project truth.
 2. Never recursively read the entire `brainstorm/` directory.
-3. The current managed workspace schema is `2`. Before a primary operation, read only the
-   `brainstorm_schema_version` marker in `brainstorm/AGENTS.md`. Continue without loading the
-   repair manual when it matches; on a missing or mismatched marker, load the repair manual and
-   stop for any required user confirmation. Never promote a legacy review implicitly.
+3. The current managed workspace schema is `3`. Before a primary operation, read only the
+   `brainstorm_schema_version` marker and check existence, not contents, of these managed paths:
+   `BRIEF.md`, `EVIDENCE_GATE.md`, `ROOT_INDEX.md`, `BUSTED.md`, `EARLY_STOPS.md`, `ideas/`,
+   `reviews/`, `branch_briefs/`, `child_indexes/`, and `reservations/`. Continue without the
+   repair manual only when the marker matches and every path exists. Never promote a legacy
+   review implicitly.
 4. After initialization, perform exactly one primary operation per run:
    - `CREATE ROOT`
    - `VERIFY <idea-id>`
    - `CREATE CHILD <parent-id>`
    - `SYNTHESIZE <parent-id>`
-5. A create run writes exactly one idea file.
+5. A successful create writes one idea file; an early-stopped candidate gets no idea or index row.
 6. A verify run reviews exactly one idea.
 7. `CREATE ROOT` must not read idea or review bodies before drafting its candidate.
 8. `CREATE CHILD` must not read the parent's raw idea, sibling bodies, or unrelated branches.
@@ -73,6 +76,7 @@ Uncertainty does not authorize brainstorming. Activation belongs to the user.
 15. When coordinating concurrent workers, stop one only for a clear scope or protocol violation,
     not because its hypothesis looks weak. Clean up its reservation and preserve partial reviews
     as non-publishing drafts.
+16. An `early_stop` is an archive record, not an idea status, accepted review, or `busted` verdict.
 
 ## Workspace layout
 
@@ -83,6 +87,7 @@ brainstorm/
 ├── EVIDENCE_GATE.md
 ├── ROOT_INDEX.md
 ├── BUSTED.md
+├── EARLY_STOPS.md
 ├── ideas/
 ├── reviews/
 ├── branch_briefs/
@@ -126,10 +131,9 @@ Initial allowed context:
 
 Do not read `ideas/**`, `reviews/**`, or branch bodies.
 
-Draft one candidate first. Only after the candidate exists in working memory, read the compact
-failure ledger in `BUSTED.md` and run a collision check. If the candidate repeats a busted core
-proposition, mechanism, prediction, or failure signature, discard it and retry at most twice.
-Write only a candidate that passes this check.
+Draft before failed-memory checks. Then apply busted signatures and explicit hard gates only.
+Archive clear failures as `ES-*`, but formalize ambiguity for `VERIFY`. A named reconsideration
+reads one `ES-*` and records it as origin. Retry at most twice.
 
 ### VERIFY <idea-id>
 
@@ -162,9 +166,9 @@ requires explicit user confirmation.
 After this preflight, read only the shared brief, branch brief, direct-child title index,
 title-only ancestry, and reservations. Do not read the parent's raw idea or sibling bodies.
 
-Draft one child first, then compare it with compact busted signatures and existing child titles.
-Retry at most twice on collision. The child must add a mechanism, prediction, test, boundary,
-implementation, or repair. If it negates the parent, route it to a later `CREATE ROOT` run.
+After preflight, draft before checking busted signatures, scoped early-stop warnings, and explicit
+controlled gates. Archive clear failures, formalize ambiguity, and retry at most twice. Preserve
+the parent while adding a mechanism, prediction, test, boundary, implementation, or repair.
 
 ### SYNTHESIZE <parent-id>
 
@@ -219,6 +223,13 @@ Recommended failure classes:
 Do not load this ledger before the initial creative draft. Use it after drafting as a negative
 collision filter so previous failures are remembered without becoming the starting context.
 
+## Early-stop archive
+
+Archive coherent pre-creation failures as `ES-YYYYMMDD-NN` in `EARLY_STOPS.md`. Only unique,
+complete, source-checked, unresolved records may warn; unverified, incomplete, or resolved records
+are archival. Draft before lookup. Reconsideration appends an `ER-*` resolution event and records
+the source on the new idea. See the lifecycle manual.
+
 ## Identifier and lifecycle rules
 
 Use zero-padded hierarchical identifiers:
@@ -228,6 +239,7 @@ Use zero-padded hierarchical identifiers:
 - grandchildren: `001-01-01`.
 
 IDs encode logical inheritance. Do not rename files when status changes.
+Early-stop IDs use the separate `ES-YYYYMMDD-NN` namespace and never enter idea indexes.
 
 Idea status:
 
@@ -288,6 +300,8 @@ After each operation, report only:
 
 - operation performed;
 - file created or reviewed;
+- any early-stop archive IDs written during the bounded attempt;
+- any reconsideration resolution event written;
 - resulting idea, evidence, and expansion status, when applicable;
 - whether a validation advisory was triggered;
 - the next user-directed action.
@@ -302,6 +316,7 @@ Stop and report the blocker when:
 - a child lacks a valid branch brief;
 - the parent is busted, blocked, saturated, or otherwise closed;
 - a candidate collides with busted signatures after two retries;
+- a required early-stop or resolution event cannot be committed safely;
 - required evidence is inaccessible;
 - identifier reservation conflicts cannot be resolved safely;
 - an interrupted operation cannot be resolved by the deterministic repair rules;

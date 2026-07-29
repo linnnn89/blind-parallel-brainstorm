@@ -10,25 +10,41 @@ Read this file only for `CREATE ROOT`.
 - active root reservations, title only
 
 Do not read any file under `ideas/`, `reviews/`, `branch_briefs/`, or `child_indexes/`.
-Do not read `BUSTED.md` before producing the initial candidate draft.
+Do not read `BUSTED.md` or `EARLY_STOPS.md` before producing the initial candidate draft.
+
+Exception: when the user explicitly asks to reconsider one named `ES-*` record, read only that
+entry before drafting. State which blocker may no longer apply or will be directly retested. Do
+not read other early-stop entries.
 
 ## Procedure
 
 1. Restate the problem internally from `BRIEF.md` without importing outside proposals.
 2. Scan root titles only to avoid direct title conflict.
 3. Choose one meaningfully distinct direction.
-4. Draft the candidate without reading prior failed-idea records.
+4. Draft the candidate without reading prior failed-idea records, except for the one explicitly
+   named early-stop record in a user-directed reconsideration.
 5. Read the compact entries in `BUSTED.md` and compare the draft against their failure
    signatures.
-6. If the core proposition, mechanism, differentiating prediction, or failure pattern collides,
-   discard the draft and retry at most twice.
-7. Reserve the next three-digit root ID when concurrency is possible.
-8. Write exactly one `ideas/NNN.md` from the idea template.
-9. Append one title-only row to `ROOT_INDEX.md` with `Display` equal to the stable ID,
-   `unreviewed` idea status, and `closed` expansion status.
-10. Remove the reservation and stop.
+6. Target only archive headings/IDs, titles, scope, evidence basis, recorded date, record status,
+   signatures, reopen conditions, and matching resolution events. Only a unique, complete,
+   source-checked, unresolved match warns; confirm its blocker still applies before discarding.
+7. Run one bounded post-draft screen only for a hard gate defined by the user or `BRIEF.md`.
+   Build a clear, traceable failure record in working memory and append it once as
+   `ES-YYYYMMDD-NN`, with `Record status: complete` last, before discarding. Do not duplicate a
+   matching record. If the archive append cannot commit, stop without discarding or retrying.
+   Formalize ambiguity for later `VERIFY`.
+8. Retry at most twice across all discarded attempts.
+9. Reserve the next three-digit root ID when concurrency is possible.
+10. Write exactly one `ideas/NNN.md` from the idea template. Set `origin_early_stop` and
+    `origin_reopen_reason` only when the user explicitly named the originating `ES-*` record.
+11. Append one title-only row to `ROOT_INDEX.md` with `Display` equal to the stable ID,
+    `unreviewed` idea status, and `closed` expansion status.
+12. After both idea and index commit, append one complete `ER-YYYYMMDD-NN` resolution event for
+    an explicit early-stop reconsideration.
+13. Remove the reservation and stop.
 
-If all three drafts collide with known busted signatures, write no idea and report the collision.
+If all three drafts are discarded, write no idea and report the busted collisions, existing
+early-stop IDs, and new early-stop IDs that caused the stop.
 
 ## Distinctness rule
 
@@ -69,5 +85,6 @@ a distinctive consequence, weaknesses, and verification questions.
 
 ## Output limit
 
-Create one idea only. Do not rank roots, compare bodies, verify the new idea, create children,
+Create at most one idea, three early-stop records, and one reconsideration resolution event.
+Early stops get no idea or index row. Do not rank roots, compare bodies, verify, create children,
 or update the main project in the same run.

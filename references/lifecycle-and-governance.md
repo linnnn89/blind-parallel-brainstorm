@@ -160,6 +160,39 @@ Apply the hard blocks and soft warnings defined in `create-child.md`. Hard state
 are not user-overridable. Soft warnings require one explicit confirmation naming the parent and
 warning codes and do not mutate lifecycle state.
 
+## Early-stop archive
+
+An early stop is a coherent candidate terminated before formal idea creation by an explicit
+pre-create hard gate or a bounded worker termination. It is not an idea status, accepted review,
+evidence state, or busted verdict.
+
+Assign a stable `ES-YYYYMMDD-NN` ID and append a compact record to `EARLY_STOPS.md`. It has no
+idea file, index row, review, branch brief, or expansion status. It may warn only when:
+
+- its ID is unique and every required field is present;
+- `Record status: complete` is its final line;
+- `Evidence basis` is `source-checked` with at least one traceable, non-unresolved locator;
+- no complete resolution event names that early stop.
+
+Unverified, incomplete, malformed, duplicate, or resolved entries are archival and never filter.
+A match never automatically busts or publishes state. Target archive ID, title, parent/scope,
+evidence basis, recorded date, record status, signatures, reopen condition, and resolution events
+before reading its reason or locators.
+
+Build each record in working memory and append once. Every `ES-*` and `ER-*` heading consumes its
+ID, even when incomplete. Within each prefix and project date, use the next unused two-digit
+sequence. When workers are used, the coordinator assigns IDs and appends serially.
+
+Do not convert a retained backup into an early stop merely because it is `unreviewed + closed`.
+That node is already a formal idea and remains governed by normal verification.
+
+Reconsideration requires explicit user instruction naming one `ES-*` record. Read only that
+record, explain why the blocker may no longer apply, and run a normal CREATE operation. Set
+`origin_early_stop` and `origin_reopen_reason` on the new idea. After its idea and index commit,
+append a complete `ER-YYYYMMDD-NN` event linking the early stop and new idea. The original record
+remains unchanged. A resolution suppresses archive-derived warnings but does not waive a current
+hard gate defined by the user or controlled brief.
+
 ## Busted memory
 
 A busted idea keeps its stable file path. Do not rename `ideas/<id>.md`.
@@ -172,6 +205,9 @@ Update its owning index row to:
 
 Append one concise record to `BUSTED.md`. The ledger is negative memory for collision checking,
 not a substitute for the detailed review.
+
+Do not store pre-create early stops in `BUSTED.md`. Every busted record must remain traceable to a
+formal idea and current accepted review with verdict `busted`.
 
 Recommended failure classes:
 
@@ -227,6 +263,7 @@ Mark a node `saturated` when one or more conditions hold:
   forward link to the replacing review;
 - indexes may update label and status fields but may not gain body summaries;
 - `BUSTED.md` is append-only except to correct a factual clerical error;
+- `EARLY_STOPS.md` is append-only except to correct a factual clerical error;
 - branch briefs may be replaced only from the current accepted review while preserving neutral
   scope and provenance;
 - promotion creates a new reviewed summary outside `brainstorm/`; it does not move or rewrite

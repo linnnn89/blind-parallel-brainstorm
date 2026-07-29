@@ -13,7 +13,7 @@ During CREATE operations:
 - do not rank ideas before generation is complete;
 - do not merge merely because wording is similar;
 - distinguish semantic similarity from mechanism similarity;
-- do not read the busted ledger before the initial candidate draft.
+- do not read the busted ledger or early-stop archive before the initial candidate draft.
 
 ## Tail exploration operators
 
@@ -58,6 +58,17 @@ A collision exists when the candidate repeats the same failed:
 
 Discard a colliding draft and retry at most twice. Do not read detailed busted reviews merely to
 avoid a repeat; the compact ledger should be sufficient.
+
+## Post-draft early-stop check
+
+After drafting, target archive IDs, titles, scope, evidence basis, date, record status,
+signatures, reopen conditions, and resolution events. Only a unique, complete, source-checked,
+unresolved match warns and requires confirming that the blocker still applies. Other entries are
+archival.
+
+Run a new pre-create hard-gate screen only when the user, shared brief, or controlled branch brief
+defines that gate. Archive a coherent clear failure before discarding it. Do not early-stop on
+ambiguous evidence.
 
 ## Exploration cadence
 

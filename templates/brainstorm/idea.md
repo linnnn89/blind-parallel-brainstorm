@@ -12,8 +12,13 @@ last_verified: null
 blocking_issue: null
 creation_mode: root|child
 expansion_axis: null
+origin_early_stop: null
+origin_reopen_reason: null
 created_at: YYYY-MM-DD
 ---
+
+`origin_early_stop` and `origin_reopen_reason` are optional provenance. Set both only during
+user-directed reconsideration of one explicitly named `ES-YYYYMMDD-NN` record.
 
 # Core proposition
 

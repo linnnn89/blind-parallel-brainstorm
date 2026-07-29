@@ -26,6 +26,10 @@
 - Population, jurisdiction, platform, or domain: [optional]
 - Authoritative project files: [optional]
 
+## Optional pre-create hard gates
+
+- [None, or one user-approved observable condition with its evidence requirement.]
+
 ---
 
 Do not place existing ideas, rankings, preferred solutions, or review conclusions in this file.
