@@ -63,6 +63,9 @@ speculative -> screened -> verified -> synthesis_ready -> protocol_ready
 
 只有当前 `accepted` review 可以发布证据状态。branch brief 必须记录其来源 review 和证据版本；状态陈旧或来源不一致时，`CREATE CHILD` 必须停止。证据尚不成熟、新颖性不确定或证据池较小时，只产生需要用户确认的警告，不自动淘汰方向。科研证据闸门可以冻结分支，但不会删除它。
 
+Review B 即使在第一次 review 中也必须挑战 Review A 的一个决定性主张，并记录该检查对
+verdict 或 gate 的影响。
+
 ## 废案机制
 
 明显不成立的构思保留稳定文件路径，但在索引中显示为：
@@ -104,7 +107,9 @@ templates/brainstorm/
   reservation.md
 ```
 
-根 `SKILL.md` 采用按需读取：当前执行什么操作，就只读取对应的一份手册，避免把全部规则和历史内容同时塞入上下文。
+根 `SKILL.md` 直接检查 `AGENTS.md` 的 schema 标记，并继续按需读取。只有初始化、schema
+不匹配或中断恢复时才加载修复手册；未经用户明确确认，不覆盖已经存在但版本不匹配的
+`AGENTS.md`。
 
 ## 关键边界
 

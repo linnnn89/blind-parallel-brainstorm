@@ -1,3 +1,7 @@
+---
+brainstorm_schema_version: 2
+---
+
 # Brainstorm Isolation Rules
 
 This directory is an isolated speculative workspace.
@@ -40,3 +44,7 @@ This directory is an isolated speculative workspace.
 20. Do not expose private chain-of-thought. Record concise assumptions, mechanisms, predictions,
     falsifiers, evidence, and decisions only.
 21. When a requested action violates isolation, stop and report the conflict.
+22. A concurrent worker may be terminated for a clear scope or protocol violation, not merely for
+    a weak or unconventional hypothesis. Preserve incomplete reviews as `draft`; if create or
+    accepted-review artifacts are partially published, use the deterministic repair rules and
+    never demote accepted evidence or guess missing content.

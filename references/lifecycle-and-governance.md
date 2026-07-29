@@ -46,6 +46,10 @@ is `speculative`. Draft and superseded reviews never override it. Multiple unlin
 reviews, duplicate review IDs, or an accepted review whose predecessor is not identified are
 invalid lifecycle metadata and block branching.
 
+If interruption leaves a valid new accepted review and its linked predecessor both marked
+`accepted`, validate the new transition and link, then finish the predecessor's permitted
+`accepted -> superseded` metadata change. Do not use this repair for unlinked or invalid reviews.
+
 ## Evidence state
 
 Evidence state records maturity, not whether the idea is favorable:

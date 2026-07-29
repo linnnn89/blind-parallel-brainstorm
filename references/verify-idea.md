@@ -14,8 +14,9 @@ Before the source-first assessment, inspect same-ID review filenames and front m
 resolve the current accepted review and evidence state. Do not read prior review bodies until the
 Review A checkpoint has been recorded in the new draft.
 
-After Review A, read prior same-ID review bodies for a bounded challenge pass. Do not read sibling
-or cousin idea bodies, unrelated reviews, or unrelated branch briefs.
+After Review A, first challenge its most decision-critical checkpoint claim, then read prior
+same-ID review bodies, when present, for a bounded historical challenge. Do not read sibling or
+cousin idea bodies, unrelated reviews, or unrelated branch briefs.
 Read `BUSTED.md` only after reaching a provisional verdict, and only when the verdict may be
 `busted` or when checking whether the same failure is already recorded.
 
@@ -29,12 +30,18 @@ Read `BUSTED.md` only after reaching a provisional verdict, and only when the ve
    - restate the idea neutrally;
    - identify assumptions and logical dependencies;
    - seek supporting evidence, counterevidence, and simpler explanations;
+   - give decisive inclusion, exclusion, and implementation claims a source locator such as a
+     section, table, registry field, or page;
    - complete a compact evidence checkpoint and provisional gate assessment;
    - record a provisional verdict without reading prior review bodies.
-5. Review B, challenge pass:
-   - read prior same-ID reviews;
-   - inspect disagreements, unsupported inherited claims, and changed evidence;
-   - run only necessary follow-up checks.
+5. Review B, challenge pass; always run it:
+   - select the one Review A claim most capable of changing the verdict or gate;
+   - run one bounded disconfirming check against that claim;
+   - when prior same-ID reviews exist, inspect disagreements, unsupported inheritance, and changed
+     evidence;
+   - record `challenged_claim`, `disconfirming_check`, `result`, and
+     `verdict_or_gate_impact`, even when this is the first review. Absence of prior reviews is not
+     a reason to skip Review B.
 6. Adjudicate retained, corrected, and unresolved claims. Select a one-step upgrade, same-state
    refresh, or evidence-driven downgrade.
 7. Complete and validate all transition, provenance, confidence, gate, blocker, and reopen
@@ -48,9 +55,9 @@ Read `BUSTED.md` only after reaching a provisional verdict, and only when the ve
 Do not modify the original idea front matter. The immutable idea records creation-time state;
 the index records lifecycle display state and the current accepted review records evidence state.
 
-If interrupted before acceptance, leave the new review as `draft`; it has no state effect. If
-state artifacts do not agree after acceptance, report a hard validation block and do not permit
-branching.
+If interrupted before acceptance, leave the new review as `draft`; it has no state effect. After
+acceptance, use the deterministic partial-commit repair rules in `workspace-and-isolation.md`.
+Hard-block only when lifecycle, transition, or source state is ambiguous or invalid.
 
 ## Verdict rules
 
@@ -134,8 +141,9 @@ index.
 
 ## Review independence
 
-Review A and Review B are sequential passes by one agent, not independent reviewers. This reduces
-anchoring but does not establish blindness. Do not claim multi-agent or independent replication.
+Review A and Review B are sequential passes by one agent, not independent reviewers. Review B
+tests the provisional checkpoint rather than merely restating it. This reduces anchoring but does
+not establish blindness. Do not claim multi-agent or independent replication.
 
 Do not reward confidence, eloquence, length, or novelty claims. Internal consistency may improve
 coherence assessment, but only external evidence may improve evidence support.

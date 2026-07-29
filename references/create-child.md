@@ -72,8 +72,8 @@ Do not read `BUSTED.md` before producing the initial child draft.
    signatures. Discard and retry at most twice on collision.
 9. Reserve the next child ID when concurrency is possible.
 10. Write exactly one `ideas/<child-id>.md` with evidence state `speculative` and revision `0`.
-11. Append one title-only row to `child_indexes/<parent-id>.md` with an empty label,
-    `unreviewed` idea status, and `closed` expansion status.
+11. Append one title-only row to `child_indexes/<parent-id>.md` with `Display` equal to the stable
+    ID, `unreviewed` idea status, and `closed` expansion status.
 12. Remove the reservation and stop.
 
 If all three drafts collide with busted signatures, write no child and report the collision.

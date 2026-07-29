@@ -37,8 +37,9 @@ VERIFY 001
 ```
 
 The verifier completes a source-first Review A before reading prior review bodies, then performs a
-bounded Review B challenge and adjudication. It starts the new review as `draft`. Only an
-`accepted` review may publish the next one-step evidence state and generate
+bounded Review B challenge and adjudication. Even on the first review, Review B records the
+challenged claim, disconfirming check, result, and verdict or gate impact. It starts the new review
+as `draft`. Only an `accepted` review may publish the next one-step evidence state and generate
 `branch_briefs/001.md`.
 
 ## 4. Record a busted direction without renaming its file

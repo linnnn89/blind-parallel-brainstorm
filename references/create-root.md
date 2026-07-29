@@ -24,8 +24,8 @@ Do not read `BUSTED.md` before producing the initial candidate draft.
    discard the draft and retry at most twice.
 7. Reserve the next three-digit root ID when concurrency is possible.
 8. Write exactly one `ideas/NNN.md` from the idea template.
-9. Append one title-only row to `ROOT_INDEX.md` with an empty label, `unreviewed` idea status,
-   and `closed` expansion status.
+9. Append one title-only row to `ROOT_INDEX.md` with `Display` equal to the stable ID,
+   `unreviewed` idea status, and `closed` expansion status.
 10. Remove the reservation and stop.
 
 If all three drafts collide with known busted signatures, write no idea and report the collision.
