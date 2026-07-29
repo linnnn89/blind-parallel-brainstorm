@@ -17,9 +17,9 @@ updated_at: YYYY-MM-DD
 
 Copy this table exactly from the current accepted review. Do not retain superseded claims.
 
-| Claim key | Current value | Confidence | Source |
+| Claim key | Current value | Confidence | Source / locator |
 |---|---|---|---|
-| [stable_key] | [concise value] | low|medium|high | [source or unresolved] |
+| [stable_key] | [concise value] | low|medium|high | [identifier plus section, table, registry field, or unresolved] |
 
 # Evidence gate summary
 

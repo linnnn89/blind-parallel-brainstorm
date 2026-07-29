@@ -66,6 +66,9 @@ revision; `CREATE CHILD` stops on stale or mismatched state. Immature evidence, 
 or a small evidence pool produces a user-confirmable warning rather than an automatic rejection.
 The research evidence gate can freeze a branch without deleting it.
 
+Review B always challenges one decision-critical Review A claim, including on the first review,
+and records the check's effect on the verdict or gate.
+
 ## Busted ideas
 
 A clearly invalid idea keeps its stable file path but is displayed in indexes as
@@ -104,8 +107,9 @@ templates/brainstorm/
   reservation.md
 ```
 
-The root skill uses lazy manual loading: an agent reads only the reference required for the current
-operation.
+The root skill checks the `AGENTS.md` schema marker directly and otherwise uses lazy manual
+loading. It loads the repair manual only for initialization, a schema mismatch, or interrupted
+work. An existing mismatched `AGENTS.md` is never replaced without explicit user confirmation.
 
 ## Core safety properties
 

@@ -4,11 +4,13 @@
 
 ### Real-run guardrails
 
-- add a managed workspace schema preflight without implicitly accepting legacy reviews;
+- check the managed workspace schema without loading the repair manual on a match, and require
+  confirmation before replacing an existing legacy `AGENTS.md`;
 - require first-review `Review B` to challenge a decision-critical checkpoint claim;
 - add source locators for decisive evidence claims;
-- define narrow worker-termination criteria and cleanup for reservations, drafts, and partial
-  commits.
+- keep review, branch-brief, and index display contracts aligned;
+- define narrow worker-termination criteria and deterministic recovery for reservations, drafts,
+  linked accepted reviews, and partial create commits.
 
 ### Evidence-state control
 

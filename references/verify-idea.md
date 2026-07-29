@@ -39,8 +39,9 @@ Read `BUSTED.md` only after reaching a provisional verdict, and only when the ve
    - run one bounded disconfirming check against that claim;
    - when prior same-ID reviews exist, inspect disagreements, unsupported inheritance, and changed
      evidence;
-   - record the challenge and result even when this is the first review. Absence of prior reviews
-     is not a reason to skip Review B.
+   - record `challenged_claim`, `disconfirming_check`, `result`, and
+     `verdict_or_gate_impact`, even when this is the first review. Absence of prior reviews is not
+     a reason to skip Review B.
 6. Adjudicate retained, corrected, and unresolved claims. Select a one-step upgrade, same-state
    refresh, or evidence-driven downgrade.
 7. Complete and validate all transition, provenance, confidence, gate, blocker, and reopen
@@ -54,9 +55,9 @@ Read `BUSTED.md` only after reaching a provisional verdict, and only when the ve
 Do not modify the original idea front matter. The immutable idea records creation-time state;
 the index records lifecycle display state and the current accepted review records evidence state.
 
-If interrupted before acceptance, leave the new review as `draft`; it has no state effect. If
-state artifacts do not agree after acceptance, report a hard validation block and do not permit
-branching.
+If interrupted before acceptance, leave the new review as `draft`; it has no state effect. After
+acceptance, use the deterministic partial-commit repair rules in `workspace-and-isolation.md`.
+Hard-block only when lifecycle, transition, or source state is ambiguous or invalid.
 
 ## Verdict rules
 

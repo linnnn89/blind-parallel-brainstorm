@@ -45,5 +45,6 @@ This directory is an isolated speculative workspace.
     falsifiers, evidence, and decisions only.
 21. When a requested action violates isolation, stop and report the conflict.
 22. A concurrent worker may be terminated for a clear scope or protocol violation, not merely for
-    a weak or unconventional hypothesis. Remove its uncommitted reservation, preserve any partial
-    review as `draft`, and never publish partial index, brief, or evidence state.
+    a weak or unconventional hypothesis. Preserve incomplete reviews as `draft`; if create or
+    accepted-review artifacts are partially published, use the deterministic repair rules and
+    never demote accepted evidence or guess missing content.

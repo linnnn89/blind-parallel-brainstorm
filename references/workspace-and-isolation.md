@@ -1,6 +1,7 @@
 # Workspace and Isolation Manual
 
-Read this file only when initializing or repairing a `brainstorm/` workspace.
+Read this file only when initializing, repairing, or handling a schema mismatch or interrupted
+operation in a `brainstorm/` workspace.
 
 Current managed workspace schema: `2`.
 
@@ -23,20 +24,23 @@ operations.
 
 ## Governance compatibility preflight
 
-Before every primary operation, read only the schema marker in `brainstorm/AGENTS.md` and the
-names of required structural files. If `brainstorm_schema_version` is missing or is not `2`:
+The root skill checks the schema marker without loading this manual. Load this section only when
+`brainstorm_schema_version` is missing or is not `2`. Then:
 
-- replace `AGENTS.md` from the current template only when the file is a known managed legacy
-  template with no project-local additions; otherwise stop and report the governance diff;
-- create a missing `EVIDENCE_GATE.md` from the template;
+- if `AGENTS.md` is absent, create it from the current template;
+- if `AGENTS.md` exists, do not overwrite it or change other workspace files yet; report the
+  governance diff and require explicit user confirmation for replacement or a user-directed
+  merge;
+- after creating or confirming `AGENTS.md`, create a missing `EVIDENCE_GATE.md` from the template;
 - do not rewrite `BRIEF.md`, idea or review bodies, indexes, branch briefs, or busted history;
-- inspect review filenames and front matter only to identify legacy state;
+- for `VERIFY` or `CREATE CHILD`, inspect only the target ID's review filenames and front matter;
+  a workspace-wide legacy inventory requires an explicit repair or audit request;
 - treat reviews without `review_status` as history, never as accepted evidence sources;
 - hard-block `CREATE CHILD` for an affected ID until a new validated `VERIFY` establishes an
   accepted source.
 
-This compatibility preflight is not a primary brainstorm operation. Continue to the requested
-operation only when the target state is unambiguous after repair.
+This compatibility repair is not a primary brainstorm operation. Continue to the requested
+operation only after any required confirmation and when the target state is unambiguous.
 
 ## Shared context boundary
 
@@ -108,6 +112,24 @@ If files are missing:
 - preserve identifiers and history;
 - report ambiguity instead of guessing status.
 
+## Deterministic partial-commit repair
+
+Use these rules only for the interrupted ID:
+
+- idea exists and its index row is missing: rebuild the row from immutable idea front matter,
+  title, and any current accepted same-ID review; use the stable ID for `Display`, or
+  `BUSTED.<id>` when the accepted verdict is busted;
+- index row exists but idea is missing: hard-block; do not invent an idea or remove the row
+  without explicit user approval;
+- review is `draft`: leave it as draft; it has no state effect;
+- one new accepted review has a valid transition and either no predecessor or a valid predecessor
+  link: treat it as authoritative; when a predecessor exists, complete its allowed
+  `accepted -> superseded` metadata change, then rebuild the index, any existing or permitted
+  branch brief, and any required busted-ledger entry from the new accepted review;
+- accepted reviews are unlinked, duplicated, or transition-invalid: hard-block branching and
+  report the exact ambiguity;
+- never demote an accepted review to draft or edit an accepted review body.
+
 ## Interrupted-worker cleanup
 
 When coordinating concurrent workers, terminate a worker only for an observable protocol failure:
@@ -118,10 +140,10 @@ freeze; verification and the evidence gate decide that.
 
 After termination, inspect only that worker's reserved ID and operation paths:
 
-- remove its reservation when no idea/index commit was completed;
-- leave an incomplete review as `draft`; it cannot update an index, brief, or evidence state;
-- if an idea exists without its index row, or an index row exists without its idea, stop with a
-  repair block instead of guessing which artifact is authoritative;
-- verify that no accepted review, branch brief, or index state was published from partial work;
+- apply the deterministic partial-commit rules above;
+- remove its reservation only after both idea and index are consistent, or after confirming that
+  neither exists;
+- verify that draft reviews did not publish state and that any accepted review has valid
+  lifecycle, index, and brief state;
 - record one compact termination event in an existing project worklog when present, including the
   operation, reason, written artifacts, and cleanup result.

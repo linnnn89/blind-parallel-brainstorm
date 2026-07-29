@@ -49,8 +49,10 @@ Uncertainty does not authorize brainstorming. Activation belongs to the user.
 
 1. Treat `brainstorm/` as speculative quarantine, not project truth.
 2. Never recursively read the entire `brainstorm/` directory.
-3. Before a primary operation, verify the managed workspace schema in `brainstorm/AGENTS.md`.
-   Repair missing or legacy governance first; never promote a legacy review implicitly.
+3. The current managed workspace schema is `2`. Before a primary operation, read only the
+   `brainstorm_schema_version` marker in `brainstorm/AGENTS.md`. Continue without loading the
+   repair manual when it matches; on a missing or mismatched marker, load the repair manual and
+   stop for any required user confirmation. Never promote a legacy review implicitly.
 4. After initialization, perform exactly one primary operation per run:
    - `CREATE ROOT`
    - `VERIFY <idea-id>`
@@ -98,7 +100,7 @@ rankings, preferred solutions, or hidden body summaries.
 
 Do not load every manual on every run.
 
-- Initialization, schema preflight, or interrupted-worker repair:
+- Initialization, schema mismatch, or interrupted-worker repair:
   `references/workspace-and-isolation.md`
 - `CREATE ROOT`: `references/create-root.md`
 - `VERIFY`: `references/verify-idea.md`
@@ -302,7 +304,7 @@ Stop and report the blocker when:
 - a candidate collides with busted signatures after two retries;
 - required evidence is inaccessible;
 - identifier reservation conflicts cannot be resolved safely;
-- an interrupted operation left an idea/index mismatch or another ambiguous partial commit;
+- an interrupted operation cannot be resolved by the deterministic repair rules;
 - the requested reads would violate isolation.
 
 Never bypass isolation merely to be helpful.

@@ -73,9 +73,13 @@ Complete before reading prior review bodies. Include only branch-inheritable cla
 
 # Review B — checkpoint challenge
 
-[Always challenge the Review A claim most capable of changing the verdict or gate, using one
-bounded disconfirming check. If prior same-ID reviews exist, also record disagreements,
-unsupported inheritance, and changed evidence. A first review must not skip this section.]
+- `challenged_claim`: [The Review A claim most capable of changing the verdict or gate.]
+- `disconfirming_check`: [One bounded source check or test.]
+- `result`: [What the check found.]
+- `verdict_or_gate_impact`: [No change, correction, downgrade, freeze, or other effect.]
+
+[If prior same-ID reviews exist, also record disagreements, unsupported inheritance, and changed
+evidence. A first review must not skip this section.]
 
 # Adjudication
 
