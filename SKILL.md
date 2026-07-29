@@ -49,23 +49,28 @@ Uncertainty does not authorize brainstorming. Activation belongs to the user.
 
 1. Treat `brainstorm/` as speculative quarantine, not project truth.
 2. Never recursively read the entire `brainstorm/` directory.
-3. After initialization, perform exactly one primary operation per run:
+3. Before a primary operation, verify the managed workspace schema in `brainstorm/AGENTS.md`.
+   Repair missing or legacy governance first; never promote a legacy review implicitly.
+4. After initialization, perform exactly one primary operation per run:
    - `CREATE ROOT`
    - `VERIFY <idea-id>`
    - `CREATE CHILD <parent-id>`
    - `SYNTHESIZE <parent-id>`
-4. A create run writes exactly one idea file.
-5. A verify run reviews exactly one idea.
-6. `CREATE ROOT` must not read idea or review bodies before drafting its candidate.
-7. `CREATE CHILD` must not read the parent's raw idea, sibling bodies, or unrelated branches.
-8. `VERIFY` must not read other idea bodies.
-9. Original idea files are immutable. Accepted review bodies are immutable; only review lifecycle
+5. A create run writes exactly one idea file.
+6. A verify run reviews exactly one idea.
+7. `CREATE ROOT` must not read idea or review bodies before drafting its candidate.
+8. `CREATE CHILD` must not read the parent's raw idea, sibling bodies, or unrelated branches.
+9. `VERIFY` must not read other idea bodies.
+10. Original idea files are immutable. Accepted review bodies are immutable; only review lifecycle
    metadata may move `draft -> accepted -> superseded`.
-10. Coherence, novelty, or confident language cannot establish truth.
-11. No brainstorm content enters the main project without explicit user approval naming the ID.
-12. Do not continue expanding in the background or without a new user invocation.
-13. Only the current accepted review may publish evidence state; never branch from a stale or
+11. Coherence, novelty, or confident language cannot establish truth.
+12. No brainstorm content enters the main project without explicit user approval naming the ID.
+13. Do not continue expanding in the background or without a new user invocation.
+14. Only the current accepted review may publish evidence state; never branch from a stale or
     source-mismatched brief.
+15. When coordinating concurrent workers, stop one only for a clear scope or protocol violation,
+    not because its hypothesis looks weak. Clean up its reservation and preserve partial reviews
+    as non-publishing drafts.
 
 ## Workspace layout
 
@@ -93,7 +98,8 @@ rankings, preferred solutions, or hidden body summaries.
 
 Do not load every manual on every run.
 
-- Initialization: `references/workspace-and-isolation.md`
+- Initialization, schema preflight, or interrupted-worker repair:
+  `references/workspace-and-isolation.md`
 - `CREATE ROOT`: `references/create-root.md`
 - `VERIFY`: `references/verify-idea.md`
 - `CREATE CHILD`: `references/create-child.md`
@@ -125,8 +131,9 @@ Write only a candidate that passes this check.
 
 ### VERIFY <idea-id>
 
-Assess the idea and evidence before reading prior review bodies, then perform a bounded challenge
-pass and adjudication.
+Assess the idea and evidence before reading prior review bodies, record the provisional
+checkpoint, then always challenge its most decision-critical claim. Prior same-ID reviews are an
+additional challenge input, not a prerequisite for Review B.
 
 Start the review as `draft`. Only a validated `accepted` review may supersede the prior source and
 update current state.
@@ -295,6 +302,7 @@ Stop and report the blocker when:
 - a candidate collides with busted signatures after two retries;
 - required evidence is inaccessible;
 - identifier reservation conflicts cannot be resolved safely;
+- an interrupted operation left an idea/index mismatch or another ambiguous partial commit;
 - the requested reads would violate isolation.
 
 Never bypass isolation merely to be helpful.

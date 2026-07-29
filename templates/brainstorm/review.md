@@ -57,9 +57,9 @@ reopen_condition: null
 
 Complete before reading prior review bodies. Include only branch-inheritable claims.
 
-| Claim key | Current value | Confidence | Source |
+| Claim key | Current value | Confidence | Source / locator |
 |---|---|---|---|
-| [stable_key] | [concise value] | low|medium|high | [source or unresolved] |
+| [stable_key] | [concise value] | low|medium|high | [identifier plus section, table, registry field, or unresolved] |
 
 ## Provisional evidence gate
 
@@ -71,10 +71,11 @@ Complete before reading prior review bodies. Include only branch-inheritable cla
 | Feasibility | pass|concern|fail|unknown | [One line.] |
 | Blockers | pass|concern|fail|unknown | [One line.] |
 
-# Review B — prior-review challenge
+# Review B — checkpoint challenge
 
-[Compare prior same-ID reviews. Record disagreements, unsupported inheritance, changed evidence,
-and only necessary follow-up checks.]
+[Always challenge the Review A claim most capable of changing the verdict or gate, using one
+bounded disconfirming check. If prior same-ID reviews exist, also record disagreements,
+unsupported inheritance, and changed evidence. A first review must not skip this section.]
 
 # Adjudication
 

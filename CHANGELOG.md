@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Real-run guardrails
+
+- add a managed workspace schema preflight without implicitly accepting legacy reviews;
+- require first-review `Review B` to challenge a decision-critical checkpoint claim;
+- add source locators for decisive evidence claims;
+- define narrow worker-termination criteria and cleanup for reservations, drafts, and partial
+  commits.
+
 ### Evidence-state control
 
 - make the current accepted review the only evidence-state source;
@@ -10,7 +18,8 @@
 - block child creation on stale briefs, source mismatch, invalid transitions, or missing metadata;
 - require explicit user confirmation for immature evidence, uncertain novelty, or small pools;
 - add a lightweight research evidence gate that freezes rather than deletes weak directions;
-- stage single-agent verification as source-first review, prior-review challenge, and adjudication.
+- stage single-agent verification as source-first review, checkpoint challenge with prior-review
+  comparison, and adjudication.
 
 ### Validation and busted-memory workflow
 
