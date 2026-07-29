@@ -51,9 +51,11 @@ Uncertainty does not authorize brainstorming. Activation belongs to the user.
 1. Treat `brainstorm/` as speculative quarantine, not project truth.
 2. Never recursively read the entire `brainstorm/` directory.
 3. The current managed workspace schema is `3`. Before a primary operation, read only the
-   `brainstorm_schema_version` marker in `brainstorm/AGENTS.md`. Continue without loading the
-   repair manual when it matches; on a missing or mismatched marker, load the repair manual and
-   stop for any required user confirmation. Never promote a legacy review implicitly.
+   `brainstorm_schema_version` marker and check existence, not contents, of these managed paths:
+   `BRIEF.md`, `EVIDENCE_GATE.md`, `ROOT_INDEX.md`, `BUSTED.md`, `EARLY_STOPS.md`, `ideas/`,
+   `reviews/`, `branch_briefs/`, `child_indexes/`, and `reservations/`. Continue without the
+   repair manual only when the marker matches and every path exists. Never promote a legacy
+   review implicitly.
 4. After initialization, perform exactly one primary operation per run:
    - `CREATE ROOT`
    - `VERIFY <idea-id>`
@@ -223,9 +225,10 @@ collision filter so previous failures are remembered without becoming the starti
 
 ## Early-stop archive
 
-Archive coherent pre-creation failures as `ES-YYYYMMDD-NN` in `EARLY_STOPS.md`. They publish no
-idea or evidence state; source-checked entries warn only and unverified entries are archival.
-Draft before lookup. See the lifecycle manual for recording and reconsideration.
+Archive coherent pre-creation failures as `ES-YYYYMMDD-NN` in `EARLY_STOPS.md`. Only unique,
+complete, source-checked, unresolved records may warn; unverified, incomplete, or resolved records
+are archival. Draft before lookup. Reconsideration appends an `ER-*` resolution event and records
+the source on the new idea. See the lifecycle manual.
 
 ## Identifier and lifecycle rules
 
@@ -298,6 +301,7 @@ After each operation, report only:
 - operation performed;
 - file created or reviewed;
 - any early-stop archive IDs written during the bounded attempt;
+- any reconsideration resolution event written;
 - resulting idea, evidence, and expansion status, when applicable;
 - whether a validation advisory was triggered;
 - the next user-directed action.
@@ -312,6 +316,7 @@ Stop and report the blocker when:
 - a child lacks a valid branch brief;
 - the parent is busted, blocked, saturated, or otherwise closed;
 - a candidate collides with busted signatures after two retries;
+- a required early-stop or resolution event cannot be committed safely;
 - required evidence is inaccessible;
 - identifier reservation conflicts cannot be resolved safely;
 - an interrupted operation cannot be resolved by the deterministic repair rules;

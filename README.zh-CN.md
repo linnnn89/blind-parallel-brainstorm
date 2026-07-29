@@ -74,8 +74,9 @@ verdict 或 gate 的影响。
 签名。
 
 早期终止不是构思状态、accepted review 或 busted verdict，不进入索引或分支。只有
-`source-checked` 记录可以在后续候选生成后产生碰撞警告；`unverified` 记录仅用于归档。
-重新考虑必须由用户点名一个 `ES-*` 记录，并说明原阻断条件为什么可能已经改变。
+唯一、完整、`source-checked` 且尚未解决的记录可以产生碰撞警告；`unverified` 或不完整
+记录仅用于归档。重新考虑必须由用户点名一个 `ES-*` 记录、说明阻断条件的变化，并在新
+idea 与索引提交后追加完整的 `ER-*` resolution event。
 
 ## 废案机制
 
@@ -119,9 +120,9 @@ templates/brainstorm/
   reservation.md
 ```
 
-根 `SKILL.md` 直接检查 `AGENTS.md` 的 schema 标记，并继续按需读取。只有初始化、schema
-不匹配或中断恢复时才加载修复手册；未经用户明确确认，不覆盖已经存在但版本不匹配的
-`AGENTS.md`。
+根 `SKILL.md` 检查 `AGENTS.md` 的 schema 标记和受管路径是否存在，但不读取这些文件的
+正文。只有初始化、schema 不匹配、结构缺失或中断恢复时才加载修复手册。迁移先创建必需
+路径，最后写入 schema 标记；未经用户明确确认，不覆盖已有但版本不匹配的 `AGENTS.md`。
 
 ## 关键边界
 
@@ -129,6 +130,7 @@ templates/brainstorm/
 - 创建或验证时禁止读取兄弟节点正文；
 - 原始构思不可修改，accepted review 正文和废案历史必须保留；
 - 早期终止记录不进入构思索引，也不能发布证据状态；
+- 不完整、重复、未核验或已经解决的早期终止记录不能过滤后续候选；
 - draft 与 superseded review 不得发布证据状态；
 - 陈旧或来源不匹配的 branch brief 不得创建子构思；
 - `BUSTED` 只是索引显示标签，不重命名原构思文件；

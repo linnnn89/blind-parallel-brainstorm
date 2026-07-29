@@ -166,24 +166,32 @@ An early stop is a coherent candidate terminated before formal idea creation by 
 pre-create hard gate or a bounded worker termination. It is not an idea status, accepted review,
 evidence state, or busted verdict.
 
-Assign a stable `ES-YYYYMMDD-NN` archive ID and append a compact record to `EARLY_STOPS.md`.
-Early-stop records have no idea file, index row, review, branch brief, or expansion status:
+Assign a stable `ES-YYYYMMDD-NN` ID and append a compact record to `EARLY_STOPS.md`. It has no
+idea file, index row, review, branch brief, or expansion status. It may warn only when:
 
-- `source-checked` requires traceable locators and may produce a later post-draft collision
-  warning;
-- `unverified` preserves a candidate for possible reconsideration but cannot filter later work;
-- every record names uncertainty and an observable reopen condition;
-- a matching record never automatically busts or publishes state for a new candidate.
+- its ID is unique and every required field is present;
+- `Record status: complete` is its final line;
+- `Evidence basis` is `source-checked` with at least one traceable, non-unresolved locator;
+- no complete resolution event names that early stop.
 
-Use the current project date and next unused two-digit sequence for `NN`. When workers are used,
-the coordinator assigns IDs and appends records serially.
+Unverified, incomplete, malformed, duplicate, or resolved entries are archival and never filter.
+A match never automatically busts or publishes state. Target archive ID, title, parent/scope,
+evidence basis, recorded date, record status, signatures, reopen condition, and resolution events
+before reading its reason or locators.
+
+Build each record in working memory and append once. Every `ES-*` and `ER-*` heading consumes its
+ID, even when incomplete. Within each prefix and project date, use the next unused two-digit
+sequence. When workers are used, the coordinator assigns IDs and appends serially.
 
 Do not convert a retained backup into an early stop merely because it is `unreviewed + closed`.
 That node is already a formal idea and remains governed by normal verification.
 
 Reconsideration requires explicit user instruction naming one `ES-*` record. Read only that
-record, explain why the old blocker may no longer apply, run a normal CREATE operation, and set
-the new idea's optional `origin_early_stop` field. The archive record remains unchanged.
+record, explain why the blocker may no longer apply, and run a normal CREATE operation. Set
+`origin_early_stop` and `origin_reopen_reason` on the new idea. After its idea and index commit,
+append a complete `ER-YYYYMMDD-NN` event linking the early stop and new idea. The original record
+remains unchanged. A resolution suppresses archive-derived warnings but does not waive a current
+hard gate defined by the user or controlled brief.
 
 ## Busted memory
 

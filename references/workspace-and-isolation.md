@@ -14,29 +14,31 @@ operations.
 
 1. Confirm the target project root.
 2. Create `brainstorm/` and its subdirectories.
-3. Copy the workspace templates from `templates/brainstorm/`, including `BUSTED.md`,
-   `EARLY_STOPS.md`, and `EVIDENCE_GATE.md`.
+3. Copy structural templates other than `AGENTS.md`, including `BUSTED.md`, `EARLY_STOPS.md`,
+   and `EVIDENCE_GATE.md`.
 4. Fill `BRIEF.md` from user-approved facts and constraints only.
 5. Leave indexes, `BUSTED.md`, and `EARLY_STOPS.md` empty except for their headers and
    instructions.
-6. Do not import old proposals, rankings, preferred solutions, or undocumented failures into the
+6. Write `AGENTS.md` last so its schema marker commits the initialized structure.
+7. Do not import old proposals, rankings, preferred solutions, or undocumented failures into the
    brief, busted ledger, or early-stop archive.
-7. Complete the requested create or verify operation.
+8. Complete the requested create or verify operation.
 
 ## Governance compatibility preflight
 
-The root skill checks the schema marker without loading this manual. Load this section only when
-`brainstorm_schema_version` is missing or is not `3`. Then:
+The root skill checks the schema marker plus existence-only status of every managed path without
+loading this manual. Load this section when the marker is absent or not `3`, or when any managed
+path is missing. Then:
 
-- if `AGENTS.md` is absent, create it from the current template;
-- if `AGENTS.md` exists, do not overwrite it or change other workspace files yet; report the
+- if an existing `AGENTS.md` is mismatched, do not change workspace files yet; report the
   governance diff and require explicit user confirmation for replacement or a user-directed
   merge;
-- after creating or confirming `AGENTS.md`, create a missing `EVIDENCE_GATE.md` from the template;
-- create a missing `EARLY_STOPS.md` from the template only after the governance update is
-  confirmed; do not infer old early stops from chats, logs, or abandoned drafts;
-- treat `origin_early_stop` as optional for schema-2 idea files and do not rewrite existing ideas
-  merely to add it;
+- after any required confirmation, create missing managed directories and structural files,
+  including `EVIDENCE_GATE.md` and `EARLY_STOPS.md`, without replacing existing content;
+- write or replace `AGENTS.md` last so the schema marker is the migration commit point;
+- do not infer old early stops from chats, logs, or abandoned drafts;
+- treat `origin_early_stop` and `origin_reopen_reason` as optional for schema-2 idea files and do
+  not rewrite existing ideas merely to add them;
 - do not rewrite `BRIEF.md`, idea or review bodies, indexes, branch briefs, or busted history;
 - for `VERIFY` or `CREATE CHILD`, inspect only the target ID's review filenames and front matter;
   a workspace-wide legacy inventory requires an explicit repair or audit request;
@@ -102,7 +104,7 @@ read the ledger before producing their initial candidate draft.
 - stop stage and dimension;
 - evidence basis and locators;
 - one-sentence reason, uncertainty, and reopen condition;
-- collision signatures and applicable scope.
+- collision signatures, applicable scope, record status, and append-only resolution events.
 
 It is not an idea index or evidence-state source. CREATE operations must draft before targeted
 lookup. A full entry is readable only when the user names its ID, a post-draft match needs
@@ -136,7 +138,7 @@ If files are missing:
 
 ## Deterministic partial-commit repair
 
-Use these rules only for the interrupted ID:
+Use these rules only for the interrupted operation and affected idea or archive IDs:
 
 - idea exists and its index row is missing: rebuild the row from immutable idea front matter,
   title, and any current accepted same-ID review; use the stable ID for `Display`, or
@@ -144,8 +146,15 @@ Use these rules only for the interrupted ID:
 - index row exists but idea is missing: hard-block; do not invent an idea or remove the row
   without explicit user approval;
 - review is `draft`: leave it as draft; it has no state effect;
-- an early-stop record exists without an idea or index row: treat that as a valid completed
-  archive action, not a partial create;
+- a unique early-stop record has all required fields and ends with `Record status: complete`:
+  treat its lack of idea and index as a valid archive action;
+- an `ES-*` or `ER-*` heading is incomplete: consume its ID but never use it as a warning; append
+  a new complete record under the next ID only when the original structured data is known;
+- duplicate IDs or malformed complete records: hard-block archive writes and report the exact
+  ambiguity;
+- an idea and index are consistent and the idea names `origin_early_stop`, but no complete
+  resolution exists: append the missing `ER-*` event from the idea's provenance;
+- a complete resolution points to a missing or inconsistent idea: hard-block and report it;
 - one new accepted review has a valid transition and either no predecessor or a valid predecessor
   link: treat it as authoritative; when a predecessor exists, complete its allowed
   `accepted -> superseded` metadata change, then rebuild the index, any existing or permitted

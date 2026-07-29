@@ -79,9 +79,10 @@ pre-create hard gate. Each `ES-YYYYMMDD-NN` record stores the candidate scope, s
 evidence locators, uncertainty, reopen condition, and compact collision signatures.
 
 Early stops are not idea statuses, accepted reviews, or busted verdicts. They do not enter
-indexes or branches. Source-checked records may produce a post-draft warning; unverified records
-are archival only. Reconsideration requires the user to name one `ES-*` record and explain why
-its blocker may no longer apply.
+indexes or branches. Only unique, complete, source-checked, unresolved records may warn;
+unverified or incomplete records are archival. Reconsideration requires the user to name one
+`ES-*` record, explain the changed blocker, and append a complete `ER-*` resolution event after
+the new idea and index commit.
 
 ## Busted ideas
 
@@ -122,9 +123,10 @@ templates/brainstorm/
   reservation.md
 ```
 
-The root skill checks the `AGENTS.md` schema marker directly and otherwise uses lazy manual
-loading. It loads the repair manual only for initialization, a schema mismatch, or interrupted
-work. An existing mismatched `AGENTS.md` is never replaced without explicit user confirmation.
+The root skill checks the `AGENTS.md` schema marker plus managed-path existence without reading
+file contents. It loads the repair manual only for initialization, mismatch, missing structure, or
+interrupted work. Migration creates required paths first and writes the schema marker last; an
+existing mismatched `AGENTS.md` is never replaced without explicit user confirmation.
 
 ## Core safety properties
 
@@ -132,6 +134,7 @@ work. An existing mismatched `AGENTS.md` is never replaced without explicit user
 - No sibling-body reads during creation or verification.
 - Original ideas are immutable; accepted review bodies and busted records preserve history.
 - Early-stop records remain outside idea indexes and cannot publish evidence state.
+- Incomplete, duplicate, unverified, or resolved early stops cannot filter later candidates.
 - Draft and superseded reviews cannot publish evidence state.
 - Stale or source-mismatched branch briefs cannot create children.
 - Busted labels never rename the underlying idea files.

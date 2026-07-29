@@ -32,8 +32,8 @@ This directory is an isolated speculative workspace.
     confirmation naming the parent and warnings.
 14. Never create and verify an idea in the same run.
 15. A successful CREATE writes one idea; an `ES-*` early stop gets no idea or index row.
-16. Early stops are not busted verdicts or evidence sources. Only source-checked records warn;
-    unverified records are archival.
+16. Early stops are not busted verdicts or evidence sources. Only unique, complete,
+    source-checked, unresolved records warn.
 17. A busted idea keeps its stable path, is displayed as `BUSTED.<id>` in its index, and cannot
     branch under current evidence.
 18. When validation thresholds are reached, recommend verification; do not silently continue
@@ -51,3 +51,7 @@ This directory is an isolated speculative workspace.
     never demote accepted evidence or guess missing content.
 24. Workers return early-stop findings; the coordinator validates, assigns IDs, and appends
     serially.
+25. Check the schema marker and managed-path existence before every operation. During migration,
+    create required paths first and write the new schema marker last.
+26. Incomplete or duplicate archive records never filter. Reconsideration appends a complete
+    resolution event; it does not rewrite the original early-stop evidence.

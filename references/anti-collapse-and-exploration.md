@@ -61,9 +61,10 @@ avoid a repeat; the compact ledger should be sufficient.
 
 ## Post-draft early-stop check
 
-Use targeted lookup of `EARLY_STOPS.md` titles, signatures, and reopen conditions only after
-drafting. A source-checked match is a warning and requires confirming that the blocker still
-applies; it is not an accepted busted verdict. Unverified entries are archival only.
+After drafting, target archive IDs, titles, scope, evidence basis, date, record status,
+signatures, reopen conditions, and resolution events. Only a unique, complete, source-checked,
+unresolved match warns and requires confirming that the blocker still applies. Other entries are
+archival.
 
 Run a new pre-create hard-gate screen only when the user, shared brief, or controlled branch brief
 defines that gate. Archive a coherent clear failure before discarding it. Do not early-stop on

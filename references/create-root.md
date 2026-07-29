@@ -25,18 +25,23 @@ not read other early-stop entries.
    named early-stop record in a user-directed reconsideration.
 5. Read the compact entries in `BUSTED.md` and compare the draft against their failure
    signatures.
-6. Target only early-stop titles, signatures, and reopen conditions. Source-checked matches warn;
-   confirm the blocker still applies before discarding. Unverified entries never filter.
+6. Target only archive headings/IDs, titles, scope, evidence basis, recorded date, record status,
+   signatures, reopen conditions, and matching resolution events. Only a unique, complete,
+   source-checked, unresolved match warns; confirm its blocker still applies before discarding.
 7. Run one bounded post-draft screen only for a hard gate defined by the user or `BRIEF.md`.
-   Archive a clear, traceable failure as `ES-YYYYMMDD-NN` before discarding; do not duplicate a
-   matching record. Formalize ambiguity for later `VERIFY`.
+   Build a clear, traceable failure record in working memory and append it once as
+   `ES-YYYYMMDD-NN`, with `Record status: complete` last, before discarding. Do not duplicate a
+   matching record. If the archive append cannot commit, stop without discarding or retrying.
+   Formalize ambiguity for later `VERIFY`.
 8. Retry at most twice across all discarded attempts.
 9. Reserve the next three-digit root ID when concurrency is possible.
-10. Write exactly one `ideas/NNN.md` from the idea template. Set `origin_early_stop` only when the
-    user explicitly named the originating `ES-*` record.
+10. Write exactly one `ideas/NNN.md` from the idea template. Set `origin_early_stop` and
+    `origin_reopen_reason` only when the user explicitly named the originating `ES-*` record.
 11. Append one title-only row to `ROOT_INDEX.md` with `Display` equal to the stable ID,
     `unreviewed` idea status, and `closed` expansion status.
-12. Remove the reservation and stop.
+12. After both idea and index commit, append one complete `ER-YYYYMMDD-NN` resolution event for
+    an explicit early-stop reconsideration.
+13. Remove the reservation and stop.
 
 If all three drafts are discarded, write no idea and report the busted collisions, existing
 early-stop IDs, and new early-stop IDs that caused the stop.
@@ -80,5 +85,6 @@ a distinctive consequence, weaknesses, and verification questions.
 
 ## Output limit
 
-Create at most one idea and three early-stop records. Early stops get no idea or index row. Do not
-rank roots, compare bodies, verify, create children, or update the main project in the same run.
+Create at most one idea, three early-stop records, and one reconsideration resolution event.
+Early stops get no idea or index row. Do not rank roots, compare bodies, verify, create children,
+or update the main project in the same run.
