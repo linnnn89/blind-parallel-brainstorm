@@ -2,6 +2,27 @@
 
 ## Unreleased
 
+### Leader-coordinated campaigns and medical research profile
+
+- add a session-scoped leader campaign over the existing four atomic operations;
+- keep every worker on one bounded assignment while the main agent owns dispatch, portfolio
+  balance, final evaluation, freeze, drain, and reporting;
+- refill capacity when any worker completes instead of waiting for synchronized waves;
+- require non-overlapping concurrent directions and preserve verification, reviewed depth, and
+  uncovered breadth when allocating the active frontier;
+- allow concentrated descendants only after a current accepted branchable review and valid open
+  branch brief, without abandoning eligible sibling lineages or new roots;
+- add stable `SC-*` success criteria with per-idea coverage and leader-level campaign evaluation;
+- add a medical and biomedical profile that routes question types and intended claims to
+  applicable decision dimensions and evidence standards;
+- keep the profile optional and preserve the general workflow for other research and software
+  ideation;
+- retain schema 3 and keep campaign fairness state session-local;
+- streamline the skill entry point around activation, cross-mode invariants, and reference
+  routing, with detailed procedures owned by their operation or profile manuals;
+- express adaptable research guidance as positive decision criteria while reserving hard
+  prohibitions for isolation, state integrity, and authorization boundaries.
+
 ### Early-stop archive
 
 - add schema 3 and an append-only `EARLY_STOPS.md` for coherent candidates stopped before formal
@@ -40,7 +61,8 @@
 ### Validation and busted-memory workflow
 
 - recommend verification after 6 unreviewed roots, 3 unreviewed children under one parent, or 8 active unreviewed ideas;
-- prefer vertical development of reviewed viable nodes over unlimited root creation;
+- prefer information-gaining verification or reviewed development over unlimited root creation,
+  without suppressing genuinely uncovered roots;
 - replace terminal `rejected` status with `busted`;
 - display failed ideas as `BUSTED.<id>` without renaming their stable files;
 - add a compact `BUSTED.md` negative-memory ledger;

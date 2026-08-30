@@ -5,6 +5,9 @@
 A file-isolated agent skill for generating independent ideas, verifying one numbered idea at a
 time, removing clearly failed directions, and developing reviewed ideas into controlled branches
 such as `001-01` and `001-02`, while archiving coherent candidates stopped before formal creation.
+It can also run a bounded, leader-coordinated asynchronous campaign over those same atomic
+operations. Its first domain profile is medical and biomedical research, while the core workflow
+remains usable for other research and software ideation.
 
 ## Why
 
@@ -24,7 +27,7 @@ Isolation improves independence. It does not prove novelty or correctness.
 
 ## Operations
 
-After one-time workspace initialization, a run performs exactly one primary operation:
+After one-time workspace initialization, each worker run performs exactly one primary operation:
 
 ```text
 CREATE ROOT
@@ -34,18 +37,41 @@ SYNTHESIZE 001
 ```
 
 A successful create run writes one idea. A bounded failed attempt may append early-stop records
-but creates no idea or index rows for those candidates. A verify run reviews one idea. The skill
-does not continue in the background and does not automatically expand uncertainty into
-brainstorming.
+but creates no idea or index rows for those candidates. A verify run reviews one idea. One
+explicit user request may authorize a session-scoped campaign containing several independent
+worker runs. Returning the final campaign report ends that session and returns control to the
+user.
+
+## Leader-coordinated campaigns
+
+In campaign mode, the main agent acts as the research lead: it fixes the objective and stable
+success criteria, assigns non-overlapping directions, evaluates accepted verification metadata,
+balances the portfolio, and decides whether the target has been met. Workers remain isolated and
+perform one bounded atomic operation each under the lead's central scheduling.
+
+Scheduling is event-driven rather than wave-based. When any worker finishes, the lead reviews that
+result and can refill the available slot without waiting for every other worker. The active
+frontier preserves three kinds of work when they are useful:
+
+- verification of decision-critical claims;
+- depth under reviewed viable branches;
+- breadth through uncovered roots or sibling lineages.
+
+A CREATE result alone cannot justify concentrated fan-out. A promising branch first needs a
+current accepted branchable review (`survives` or qualified `weakened`) and a valid open branch
+brief. It may then receive distinct descendants such as `010-01`, `010-02`, and `010-03`, while
+work on `011`, `012`, or new roots such as `013` and `014` continues when those directions remain
+eligible. The lead freezes new dispatches when the target is met or a real boundary is reached,
+drains compliant in-flight work, reports the state, and waits for the user. Synthesis and
+promotion remain separate user decisions.
 
 ## Development cadence
 
 ```text
-limited horizontal roots
-  -> validation advisory
-  -> VERIFY individual ideas
+independent roots
+  -> targeted VERIFY
   -> survives / weakened / blocked / busted
-  -> vertical children only from viable reviewed nodes
+  -> balanced breadth + reviewed depth + verification
   -> explicit synthesis and promotion
 ```
 
@@ -53,8 +79,27 @@ Default validation advice is triggered at 6 unreviewed roots, 3 unreviewed child
 parent, or 8 active unreviewed ideas in total. The advice is not a hard block: explicit user
 instructions still control the next operation.
 
-Once viable roots exist, generic continuation should prefer vertical development over endlessly
-adding more roots.
+Once viable roots exist, generic continuation should choose the highest-information next action:
+verify an unresolved claim, deepen a reviewed branch, or add a genuinely uncovered root. A
+promising lineage receives priority within a balanced frontier, not ownership of the whole
+portfolio.
+
+## Medical research profile
+
+For medical and biomedical work, the lead first identifies the question type, then selects only
+the decision dimensions relevant to it. Examples include causal validity for etiologic questions,
+discrimination and clinical utility for diagnostic or prediction questions, treatment contrast
+and safety for interventions, and biological linkage plus translational distance for mechanism
+work. Public-health, implementation, secondary-data, omics, and methods questions receive their
+own applicable dimensions.
+
+Question structure and evidence standards follow the question type and intended claim. PICO is
+used when it clarifies a structured clinical question; other questions use dimensions suited to
+their scientific function. Reviews distinguish direct support, indirect support, plausibility,
+analogy, and counterevidence; preserve the boundary between association, causation, mechanism,
+and clinical recommendation; and record which stable `SC-*` success criteria each idea addresses,
+supports, or leaves blocked. The main agent judges whether the campaign as a whole has met the
+user's target.
 
 ## Evidence-state control
 
@@ -108,6 +153,8 @@ references/
   create-child.md
   lifecycle-and-governance.md
   anti-collapse-and-exploration.md
+  leader-campaign.md
+  medical-research-profile.md
   synthesis-and-promotion.md
 templates/brainstorm/
   AGENTS.md
@@ -167,10 +214,18 @@ Continue the brainstorm. If the validation threshold is reached, recommend which
 instead of silently adding another root.
 ```
 
+```text
+Run a bounded medical-research campaign on this question. Act as the PI, give each worker one
+non-overlapping atomic assignment, refill slots as workers finish, and preserve breadth while
+deepening only branches that have an accepted branchable review. Stop dispatching when the agreed
+SC-* criteria are met, drain in-flight work, then report for my decision.
+```
+
 ## Status
 
-This is the first working specification. The workflow intentionally favors isolation, auditable
-files, bounded exploration, and explicit user control over maximum automation.
+This is a working specification. The workflow intentionally favors isolation, auditable files,
+bounded asynchronous exploration, balanced depth and breadth, and explicit user control over
+automation and promotion.
 
 ## License
 

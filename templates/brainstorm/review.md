@@ -15,6 +15,10 @@ last_verified: YYYY-MM-DD|null
 gate_decision: continue|freeze
 blocking_issue: null
 reopen_condition: null
+question_type: null
+success_criteria_addressed: []
+success_criteria_supported: []
+success_criteria_blocked: []
 ---
 
 # Review A — source-first assessment
@@ -88,6 +92,15 @@ evidence. A first review must not skip this section.]
 - Unresolved claims: [What remains uncertain?]
 - Transition check: [Valid one-step upgrade, refresh, or evidence-driven downgrade.]
 
+## Success-criterion coverage
+
+Assess only this idea against stable `SC-*` criteria in `BRIEF.md`. Do not read sibling bodies or
+declare the campaign globally complete.
+
+| Criterion | Relationship | Basis |
+|---|---|---|
+| `SC-NN` | addressed|supported|blocked|not-relevant | [One line grounded in this review.] |
+
 # Highest-information next test
 
 [Recommend one concrete next action, including required data or tooling.]
@@ -112,4 +125,6 @@ Complete this section only when the verdict is `busted`.
 ---
 
 Only an accepted review with valid transition and gate metadata may update current state.
-`survives` means worth retaining, not confirmed truth. `BUSTED.md` receives only compact metadata.
+Criterion metadata reports per-idea coverage; only the campaign leader judges portfolio-level
+completion. `survives` means worth retaining, not confirmed truth. `BUSTED.md` receives only
+compact metadata.

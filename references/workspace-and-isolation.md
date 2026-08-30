@@ -24,6 +24,10 @@ operations.
    brief, busted ledger, or early-stop archive.
 8. Complete the requested create or verify operation.
 
+Optional campaign, domain-profile, and success-criterion metadata added by current templates does
+not create a new managed path or require a schema migration. Do not rewrite a legacy schema-3
+workspace merely to add optional fields.
+
 ## Governance compatibility preflight
 
 The root skill checks the schema marker plus existence-only status of every managed path without
@@ -170,6 +174,11 @@ wrong operation or ID, forbidden reads, locked-scope violation, immutable-file m
 committed work, fabricated or untraceable evidence, or repeated off-task behavior after one
 correction. Do not terminate merely because a hypothesis is unconventional, weak, or likely to
 freeze; verification and the evidence gate decide that.
+
+Reaching a campaign success criterion freezes new dispatches but is not, by itself, a reason to
+terminate a compliant in-flight atomic operation. Drain such work normally. A stalled worker may
+be handled only under the same observable protocol and interrupted-operation rules; do not invent
+a campaign-wide wall-clock kill value.
 
 Workers do not append `EARLY_STOPS.md` directly. They may return one structured candidate record
 with evidence locators. The coordinator validates it, assigns the `ES-*` ID, and appends

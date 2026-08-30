@@ -73,11 +73,14 @@ ambiguous evidence.
 ## Exploration cadence
 
 Once the pool reaches its validation advisory threshold, recommend verification before further
-horizontal generation. After viable nodes exist, prefer vertical development of reviewed branches
-over endlessly adding roots.
+horizontal generation. After viable nodes exist, choose the next operation by information value:
+verify unresolved claims, deepen reviewed branches, or add genuinely uncovered root directions.
+In a leader-coordinated campaign, preserve the balanced frontier in
+`leader-campaign.md`; a promising lineage may receive more attention without consuming every
+available generation slot.
 
 ## Stopping exploration
 
-Do not continue because more branches are imaginable. Freeze or saturate a branch when additional
-children no longer add mechanisms, predictions, tests, boundaries, implementations, or repairs,
-or when the next useful step requires evidence rather than more ideation.
+Freeze or saturate a branch when additional children no longer add mechanisms, predictions,
+tests, boundaries, implementations, or repairs, or when the next useful step requires evidence
+rather than more ideation.

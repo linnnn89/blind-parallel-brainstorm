@@ -22,7 +22,8 @@ Before drafting, read only:
 - same-ID review filenames and front matter;
 - the current accepted review's compact evidence checkpoint and evidence-gate table;
 - `brainstorm/branch_briefs/<parent-id>.md`;
-- the owning title-only index row.
+- the owning title-only index row;
+- in a campaign, the worker's own dispatch envelope.
 
 Resolve the current accepted review as defined in the lifecycle manual. Compare it with the branch
 brief.
@@ -55,6 +56,7 @@ confirms the parent ID and warning codes, including when confirmation is already
 - `brainstorm/child_indexes/<parent-id>.md`
 - title-only ancestry needed to understand scope
 - active reservations under the parent, title only
+- this worker's own reservation fields, when present
 
 Do not read the parent's raw idea, sibling bodies, sibling reviews, or unrelated branches.
 Do not read `BUSTED.md` or `EARLY_STOPS.md` before producing the initial child draft.
@@ -67,7 +69,8 @@ child must still preserve the parent's accepted core proposition.
 
 1. Complete the state-integrity preflight and any required soft-warning confirmation.
 2. Read the parent's controlled branch brief.
-3. Select one unresolved expansion question or allowed axis.
+3. Select one unresolved expansion question or allowed axis. In a campaign, use the assigned
+   primary direction and success criterion unless they conflict with the current branch brief.
 4. Scan direct-child titles to avoid a duplicate proposition.
 5. Confirm that the proposed child preserves the parent's core proposition.
 6. Draft one candidate child.
@@ -83,7 +86,9 @@ child must still preserve the parent's accepted core proposition.
     match. If the archive append cannot commit, stop without discarding or retrying. Formalize
     ambiguity for later `VERIFY`.
 11. Retry at most twice across all discarded attempts.
-12. Reserve the next child ID when concurrency is possible.
+12. Reserve the next child ID when concurrency is possible. In a campaign, record the assigned
+    lineage, primary direction, success criterion, and concise overlap exclusion in this worker's
+    reservation; other workers may read only its title.
 13. Write exactly one `ideas/<child-id>.md` with evidence state `speculative` and revision `0`.
     Set `origin_early_stop` and `origin_reopen_reason` only for an explicitly named originating
     `ES-*` record.
@@ -112,15 +117,18 @@ repair. More detail alone is not enough.
 
 ## Vertical-development priority
 
-After a useful root pool exists, prefer developing `survives` or qualified `weakened` nodes over
-adding more roots. Within one parent, however, recommend verification when 3 direct children are
-still unreviewed. Do not let a vertical branch become another pile of untested files.
+After a useful root pool exists, reviewed viable nodes deserve vertical development, but they do
+not automatically displace every sibling lineage or uncovered root direction. In a campaign, the
+leader may dispatch several children under one parent only when their primary contributions are
+distinct and the balanced-frontier rules preserve eligible work elsewhere.
+
+When 3 direct children under one parent remain unreviewed, pause further child creation and
+recommend verification.
 
 ## New-root rule
 
-If the proposed idea denies the parent's core proposition, changes the primary objective, or
-requires abandoning inherited assumptions, do not create it as a child. Route it to `CREATE
-ROOT` in a later run.
+An idea that denies the parent's core proposition, changes the primary objective, or abandons
+inherited assumptions belongs under `CREATE ROOT` in a later run.
 
 ## Weakened parent rule
 
@@ -131,5 +139,5 @@ criticism.
 ## Output limit
 
 Create at most one child, three early-stop records, and one reconsideration resolution event.
-Early stops get no idea or index row. Do not verify, compare sibling bodies, synthesize, or
-promote in the same run.
+Early stops get no idea or index row. Verification, sibling comparison, synthesis, and promotion
+belong to later authorized operations.
