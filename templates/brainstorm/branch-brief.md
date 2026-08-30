@@ -10,6 +10,9 @@ last_verified: YYYY-MM-DD
 gate_decision: continue|freeze
 blocking_issue: null
 reopen_condition: null
+question_type: null
+success_criteria_supported: []
+success_criteria_blocked: []
 updated_at: YYYY-MM-DD
 ---
 
@@ -30,6 +33,15 @@ Copy this table exactly from the current accepted review. Do not retain supersed
 | Novelty | pass|concern|fail|unknown | [One line.] |
 | Feasibility | pass|concern|fail|unknown | [One line.] |
 | Blockers | pass|concern|fail|unknown | [One line.] |
+
+# Success-criterion coverage
+
+Copy only the selected idea's supported or blocked `SC-*` relationships from the current accepted
+review. This does not declare campaign-level completion.
+
+| Criterion | Relationship | Basis |
+|---|---|---|
+| `SC-NN` | supported|blocked | [One concise line.] |
 
 # Neutral core proposition
 

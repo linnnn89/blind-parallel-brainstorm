@@ -1,23 +1,20 @@
 ---
 name: blind-parallel-brainstorm
 description: >
-  Generate, verify, and deepen independent ideas inside a file-isolated brainstorm workspace.
-  Use only when the user explicitly requests divergent exploration, alternative hypotheses,
-  numbered idea files, validation of a selected idea, or development of reviewed branches such
-  as 001-01. Root ideas do not read sibling bodies; verification reads one selected idea; child
-  ideas inherit a controlled branch brief. Do not use for ordinary search, evidence summaries,
-  rewriting, or tasks where the user did not request brainstorming.
+  Generate, verify, and deepen independent ideas in a file-isolated brainstorm workspace, either
+  as one atomic operation or a leader-coordinated asynchronous campaign. Use when the user
+  explicitly requests divergent ideation, numbered hypotheses, verification, or reviewed branch
+  development, especially for medical and biomedical research. Also supports other research and
+  software ideation; ordinary retrieval, summaries, and rewriting remain outside scope.
 ---
 
 # Blind Parallel Brainstorm
 
 ## Purpose
 
-Create an auditable forest of independent ideas, remove clearly failed directions, and deepen
-only the branches that survive review without allowing sibling reasoning to homogenize later
-work.
-
-The skill uses file-level context isolation:
+Create an auditable forest of independent ideas, test one numbered idea at a time, and deepen
+reviewed branches without allowing sibling reasoning to homogenize later work. File-level
+isolation preserves these boundaries:
 
 - root ideas see a shared brief and title-only index, not other idea bodies;
 - verification reads one numbered idea at a time;
@@ -26,12 +23,12 @@ The skill uses file-level context isolation:
 - clearly invalid ideas are labeled `BUSTED.<id>` in indexes while their file paths remain stable;
 - speculative content stays quarantined until the user explicitly promotes it.
 
-Do not expose or store private chain-of-thought. Store concise propositions, assumptions,
-mechanisms, predictions, falsifiers, evidence, and decisions.
+Persist concise propositions, assumptions, mechanisms, predictions, falsifiers, evidence, and
+decisions.
 
 ## Activation boundary
 
-Use only when the user explicitly requests:
+Activate only when the user explicitly requests:
 
 - brainstorming or divergent exploration;
 - independent, unconventional, contrarian, or tail directions;
@@ -39,44 +36,48 @@ Use only when the user explicitly requests:
 - verification of a selected numbered idea;
 - development of a reviewed idea into child branches;
 - synthesis or promotion of selected reviewed branches;
+- a bounded asynchronous campaign of independent roots, reviews, or reviewed descendants;
 - resumption of an existing isolated brainstorm workspace.
 
-Do not activate for ordinary retrieval, routine summaries, fact checking without hypothesis
-generation, rewriting, or implementation of an already selected direction.
-
-Uncertainty does not authorize brainstorming. Activation belongs to the user.
+Ordinary retrieval, routine summaries, fact checking without hypothesis generation, rewriting,
+and implementation of an already selected direction remain outside this skill.
 
 ## Core invariants
 
-1. Treat `brainstorm/` as speculative quarantine, not project truth.
-2. Never recursively read the entire `brainstorm/` directory.
-3. The current managed workspace schema is `3`. Before a primary operation, read only the
-   `brainstorm_schema_version` marker and check existence, not contents, of these managed paths:
-   `BRIEF.md`, `EVIDENCE_GATE.md`, `ROOT_INDEX.md`, `BUSTED.md`, `EARLY_STOPS.md`, `ideas/`,
-   `reviews/`, `branch_briefs/`, `child_indexes/`, and `reservations/`. Continue without the
-   repair manual only when the marker matches and every path exists. Never promote a legacy
-   review implicitly.
-4. After initialization, perform exactly one primary operation per run:
+1. Treat `brainstorm/` as speculative quarantine rather than project truth, and never recursively
+   read it.
+2. Before each primary operation, check the schema marker and required-path existence exactly as
+   defined in `references/workspace-and-isolation.md`. The current schema is `3`; a mismatch,
+   missing path, or interrupted commit routes to that manual before other work.
+3. Each worker invocation performs exactly one primary operation:
    - `CREATE ROOT`
    - `VERIFY <idea-id>`
    - `CREATE CHILD <parent-id>`
    - `SYNTHESIZE <parent-id>`
-5. A successful create writes one idea file; an early-stopped candidate gets no idea or index row.
-6. A verify run reviews exactly one idea.
-7. `CREATE ROOT` must not read idea or review bodies before drafting its candidate.
-8. `CREATE CHILD` must not read the parent's raw idea, sibling bodies, or unrelated branches.
-9. `VERIFY` must not read other idea bodies.
-10. Original idea files are immutable. Accepted review bodies are immutable; only review lifecycle
-   metadata may move `draft -> accepted -> superseded`.
-11. Coherence, novelty, or confident language cannot establish truth.
-12. No brainstorm content enters the main project without explicit user approval naming the ID.
-13. Do not continue expanding in the background or without a new user invocation.
-14. Only the current accepted review may publish evidence state; never branch from a stale or
-    source-mismatched brief.
-15. When coordinating concurrent workers, stop one only for a clear scope or protocol violation,
-    not because its hypothesis looks weak. Clean up its reservation and preserve partial reviews
-    as non-publishing drafts.
-16. An `early_stop` is an archive record, not an idea status, accepted review, or `busted` verdict.
+   A user-authorized campaign may coordinate several such invocations without changing this
+   worker boundary.
+4. Apply the operation-specific read boundary:
+   - root creation uses the shared brief, root title index, and title-only reservations;
+   - verification uses one idea, its own review history, and evidence needed to test it;
+   - child creation uses a current state-checked branch brief and title-only ancestry or indexes;
+   - synthesis uses only explicitly selected reviewed nodes.
+5. A successful CREATE writes one idea. A VERIFY reviews one idea. Creation and verification
+   remain separate operations.
+6. Original idea bodies and accepted review bodies are immutable. Only the current accepted
+   review publishes evidence state; branch creation requires a matching current brief.
+7. `early_stop` records remain outside the idea tree. `busted` is a verdict for a formal idea and
+   closes that idea while preserving its stable path.
+8. Base verdicts and evidence states on observable support, counterevidence, and uncertainty;
+   coherence or confident wording is not evidence.
+9. Promotion requires explicit user approval naming the selected idea. Synthesis remains a
+   separately authorized operation.
+10. In a campaign, the main agent owns dispatch, portfolio balance, final evaluation, and
+    reporting. Workers stay within their assignment and return after one operation.
+11. Concurrent creative assignments need distinct primary contributions. Concentrated fan-out
+    requires a current accepted branchable review and valid open brief, while eligible sibling
+    lineages and uncovered root directions retain capacity.
+12. When a campaign reaches its goal or boundary, freeze new dispatches, drain compliant in-flight
+    operations, report the portfolio, and return control to the user.
 
 ## Workspace layout
 
@@ -101,225 +102,79 @@ Use `templates/brainstorm/` when initializing a project.
 exclusions, success criteria, and optional evidence boundary. It must not contain prior ideas,
 rankings, preferred solutions, or hidden body summaries.
 
-## Lazy reference loading
+## Reference routing
 
-Do not load every manual on every run.
+Load only the reference required by the current operation and active mode or domain.
 
-- Initialization, schema mismatch, or interrupted-worker repair:
-  `references/workspace-and-isolation.md`
-- `CREATE ROOT`: `references/create-root.md`
-- `VERIFY`: `references/verify-idea.md`
-- `CREATE CHILD`: `references/create-child.md`
-- Status, thresholds, branching, and repair: `references/lifecycle-and-governance.md`
-- Optional exploration operators: `references/anti-collapse-and-exploration.md`
-- Explicit convergence or promotion: `references/synthesis-and-promotion.md`
+| Situation | Reference |
+|---|---|
+| Initialization, schema mismatch, or interrupted work | `references/workspace-and-isolation.md` |
+| `CREATE ROOT` | `references/create-root.md` |
+| `VERIFY <idea-id>` | `references/verify-idea.md` |
+| `CREATE CHILD <parent-id>` | `references/create-child.md` |
+| Asynchronous or multi-agent campaign | `references/leader-campaign.md` |
+| Medical, biomedical, clinical, epidemiological, or public-health work | `references/medical-research-profile.md` |
+| State, thresholds, branching, archive records, or repair | `references/lifecycle-and-governance.md` |
+| Tail-exploration operators | `references/anti-collapse-and-exploration.md` |
+| Explicit synthesis or promotion | `references/synthesis-and-promotion.md` |
 
-The root skill plus the current operation manual should normally be sufficient.
+The root skill, current operation manual, and any activated campaign or domain profile should
+normally be sufficient.
 
-## Operation routing
+## Operation and mode selection
 
-### CREATE ROOT
+- `CREATE ROOT` creates one independent direction without a selected parent.
+- `VERIFY <idea-id>` tests one idea and publishes state only through a valid accepted review.
+- `CREATE CHILD <parent-id>` develops one reviewed, branchable parent through its controlled brief.
+- `SYNTHESIZE <parent-id>` compares explicitly selected reviewed nodes on user request.
 
-Use for one new independent direction with no selected parent.
+For a user-authorized campaign, load `references/leader-campaign.md` before dispatch. The main
+agent fixes stable `SC-*` criteria, schedules non-overlapping atomic work as capacity becomes
+available, balances verification with breadth and reviewed depth, and judges completion.
 
-Initial allowed context:
+For medical work, also load `references/medical-research-profile.md`. Route the question by its
+scientific or clinical function, activate only decision-relevant dimensions, and keep association,
+prediction, mechanism, intervention effect, and clinical recommendation as distinct claims.
 
-- `AGENTS.md`
-- `BRIEF.md`
-- `ROOT_INDEX.md`
-- title-only active reservations
+## Lifecycle authority
 
-Do not read `ideas/**`, `reviews/**`, or branch bodies.
+Use `references/lifecycle-and-governance.md` as the authority for identifiers, review and evidence
+transitions, validation thresholds, branching limits, saturation, `BUSTED.md`, `EARLY_STOPS.md`,
+and state repair. Operation manuals own their read boundaries and commit procedures;
+`references/synthesis-and-promotion.md` owns convergence and promotion requirements.
 
-Draft before failed-memory checks. Then apply busted signatures and explicit hard gates only.
-Archive clear failures as `ES-*`, but formalize ambiguity for `VERIFY`. A named reconsideration
-reads one `ES-*` and records it as origin. Retry at most twice.
-
-### VERIFY <idea-id>
-
-Assess the idea and evidence before reading prior review bodies, record the provisional
-checkpoint, then always challenge its most decision-critical claim. Prior same-ID reviews are an
-additional challenge input, not a prerequisite for Review B.
-
-Start the review as `draft`. Only a validated `accepted` review may supersede the prior source and
-update current state.
-
-Allowed verdicts:
-
-- `survives`
-- `weakened`
-- `blocked`
-- `busted`
-
-A busted idea keeps its stable file path, but its index display becomes `BUSTED.<idea-id>`, its
-expansion closes, and a compact failure record is appended to `BUSTED.md`.
-
-### CREATE CHILD <parent-id>
-
-Use only when the parent is `survives` or `weakened`, has a controlled branch brief, and has
-expansion status `open`.
-
-Before drafting, compare the brief with the accepted review. Stop on stale state, source mismatch,
-invalid transition, or missing metadata. Immature evidence, uncertain novelty, or a small pool
-requires explicit user confirmation.
-
-After this preflight, read only the shared brief, branch brief, direct-child title index,
-title-only ancestry, and reservations. Do not read the parent's raw idea or sibling bodies.
-
-After preflight, draft before checking busted signatures, scoped early-stop warnings, and explicit
-controlled gates. Archive clear failures, formalize ambiguity, and retry at most twice. Preserve
-the parent while adding a mechanism, prediction, test, boundary, implementation, or repair.
-
-### SYNTHESIZE <parent-id>
-
-Run only on explicit user request. Read only selected reviewed nodes and their reviews. Write a
-separate synthesis artifact; do not rewrite original ideas or treat agreement as proof.
-
-## Validation advisory
-
-Brainstorming should not accumulate an indefinitely growing pile of unreviewed files.
-
-Recommend switching to verification when any default threshold is reached:
-
-```yaml
-unreviewed_root_ideas: 6
-unreviewed_children_per_parent: 3
-total_unreviewed_active_ideas: 8
-```
-
-Also recommend verification earlier when the current pool already covers at least three
-meaningfully different mechanisms or analysis axes.
-
-This is an advisory, not a hard block. If the user explicitly requests another root, create it.
-For a generic request such as "continue brainstorming," use this priority:
-
-1. if the advisory threshold is reached, suggest `VERIFY` and name up to three unreviewed IDs;
-2. otherwise, if viable open nodes exist, prefer vertical `CREATE CHILD` development;
-3. create another root only for an uncovered direction or explicit user request.
-
-## Busted idea memory
-
-`BUSTED.md` is a compact negative-memory ledger, not a full archive. Detailed reasoning stays in
-the idea's review file.
-
-Each entry contains only:
-
-- stable ID and title;
-- failure class;
-- one-sentence reason;
-- compact collision signatures;
-- scope: global, root, or parent-specific.
-
-Recommended failure classes:
-
-- `contradicts-facts`
-- `duplicate`
-- `no-new-information`
-- `non-falsifiable`
-- `unsupported-causal-leap`
-- `scope-violation`
-- `implementation-impossible`
-
-Do not load this ledger before the initial creative draft. Use it after drafting as a negative
-collision filter so previous failures are remembered without becoming the starting context.
-
-## Early-stop archive
-
-Archive coherent pre-creation failures as `ES-YYYYMMDD-NN` in `EARLY_STOPS.md`. Only unique,
-complete, source-checked, unresolved records may warn; unverified, incomplete, or resolved records
-are archival. Draft before lookup. Reconsideration appends an `ER-*` resolution event and records
-the source on the new idea. See the lifecycle manual.
-
-## Identifier and lifecycle rules
-
-Use zero-padded hierarchical identifiers:
-
-- roots: `001`, `002`;
-- children: `001-01`, `001-02`;
-- grandchildren: `001-01-01`.
-
-IDs encode logical inheritance. Do not rename files when status changes.
-Early-stop IDs use the separate `ES-YYYYMMDD-NN` namespace and never enter idea indexes.
-
-Idea status:
-
-- `unreviewed`
-- `survives`
-- `weakened`
-- `blocked`
-- `busted`
-
-Expansion status:
-
-- `closed`
-- `open`
-- `frozen`
-- `saturated`
-
-Evidence state:
-
-```text
-speculative -> screened -> verified -> synthesis_ready -> protocol_ready
-```
-
-Evidence state is independent of idea and expansion status. Only an accepted review may publish a
-one-step transition; synthesis or user approval may satisfy transition conditions but cannot
-change state by itself. See `references/lifecycle-and-governance.md` for minimum conditions,
-refreshes, and evidence-driven downgrades.
-
-Only `survives` and qualified `weakened` nodes may open vertical branches. `blocked` nodes freeze;
-`busted` nodes close permanently under the current evidence. Mark a branch saturated when
-further children add no new mechanism, prediction, test, boundary, implementation, or repair.
-
-Default limits:
-
-```yaml
-max_depth: 3
-max_children_per_node: 5
-max_active_nodes_per_root: 12
-max_unreviewed_children_per_node: 3
-```
-
-## Promotion boundary
-
-Promotion requires:
-
-1. a current accepted review;
-2. status `survives` or explicitly qualified `weakened`;
-3. evidence state `synthesis_ready` or `protocol_ready`;
-4. explicit user approval naming the ID;
-5. visible uncertainty and counterevidence;
-6. a concise copy into the main project, still labeled as hypothesis or proposal unless external
-   evidence supports a stronger statement.
-
-Never link the main project to the entire brainstorm forest.
+For a generic request to continue, select the legal operation with the largest unresolved
+information value: verify an important claim, develop a reviewed open branch, or add a genuinely
+uncovered root direction. Validation thresholds create review pressure rather than a universal
+depth-first queue. Campaign scheduling follows the balanced frontier in
+`references/leader-campaign.md`.
 
 ## Output contract
 
-After each operation, report only:
+After an atomic operation, report:
 
 - operation performed;
 - file created or reviewed;
-- any early-stop archive IDs written during the bounded attempt;
-- any reconsideration resolution event written;
-- resulting idea, evidence, and expansion status, when applicable;
-- whether a validation advisory was triggered;
+- resulting idea, evidence, and expansion state when applicable;
+- any archive, resolution, validation, or blocker event;
 - the next user-directed action.
 
-Do not dump hidden sibling bodies. Do not claim that isolation proves novelty or correctness.
+After a campaign, provide a compact leader view:
+
+- whether each success criterion is met, unmet, or blocked;
+- completed operations and retained high-potential IDs with their current states;
+- breadth, depth, and verification coverage;
+- unresolved blockers, important uncertainty, and the next user decision.
+
+Keep hidden sibling bodies outside the report. Isolation supports independence; accepted evidence
+and review state determine what conclusions are justified.
 
 ## Failure handling
 
-Stop and report the blocker when:
+Stop the current operation and report when the target is missing or ineligible, the requested read
+would violate isolation, required state or evidence is unavailable, or a reservation, commit, or
+repair cannot complete safely. Load the workspace or lifecycle manual for deterministic recovery.
 
-- the requested ID does not exist;
-- a child lacks a valid branch brief;
-- the parent is busted, blocked, saturated, or otherwise closed;
-- a candidate collides with busted signatures after two retries;
-- a required early-stop or resolution event cannot be committed safely;
-- required evidence is inaccessible;
-- identifier reservation conflicts cannot be resolved safely;
-- an interrupted operation cannot be resolved by the deterministic repair rules;
-- the requested reads would violate isolation.
-
-Never bypass isolation merely to be helpful.
+When a campaign reaches an agreed boundary before its criteria are met, freeze new dispatches,
+drain compliant work, and report the target as unmet with the blocking condition and next user
+decision.

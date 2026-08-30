@@ -44,13 +44,15 @@ Read `BUSTED.md` only after reaching a provisional verdict, and only when the ve
      a reason to skip Review B.
 6. Adjudicate retained, corrected, and unresolved claims. Select a one-step upgrade, same-state
    refresh, or evidence-driven downgrade.
-7. Complete and validate all transition, provenance, confidence, gate, blocker, and reopen
-   metadata.
-8. If valid, accept the new review, link it to the previous accepted review, and mark the previous
+7. Compare this idea with any stable `SC-*` criteria in `BRIEF.md`. Record only the criteria this
+   review addresses, supports, or blocks; do not inspect siblings or declare campaign completion.
+8. Complete and validate all transition, provenance, confidence, gate, blocker, reopen, and
+   applicable criterion metadata.
+9. If valid, accept the new review, link it to the previous accepted review, and mark the previous
    review `superseded` by changing lifecycle metadata only.
-9. Update the selected index row. For a viable branch, regenerate the whole brief from the
+10. Update the selected index row. For a viable branch, regenerate the whole brief from the
    accepted review and compare source, revision, state, gate, and evidence checkpoint.
-10. For `busted`, append one compact failure record to `BUSTED.md`.
+11. For `busted`, append one compact failure record to `BUSTED.md`.
 
 Do not modify the original idea front matter. The immutable idea records creation-time state;
 the index records lifecycle display state and the current accepted review records evidence state.
@@ -132,6 +134,7 @@ Replace the whole branch brief from the accepted review. It contains only:
 - non-negotiable boundaries;
 - allowed expansion axes;
 - current expansion status.
+- per-idea success-criterion relationships, when the shared brief defines them.
 
 Do not copy the full idea or review narrative.
 
@@ -143,7 +146,7 @@ index.
 
 Review A and Review B are sequential passes by one agent, not independent reviewers. Review B
 tests the provisional checkpoint rather than merely restating it. This reduces anchoring but does
-not establish blindness. Do not claim multi-agent or independent replication.
+not establish blindness or independent replication.
 
-Do not reward confidence, eloquence, length, or novelty claims. Internal consistency may improve
-coherence assessment, but only external evidence may improve evidence support.
+Base the verdict on claim logic, discriminating tests, and evidence. Internal consistency may
+improve coherence assessment, while evidence support changes only through external evidence.

@@ -1,7 +1,7 @@
 # Lifecycle and Governance Manual
 
-Read this file only when changing status, deciding whether to branch, repairing indexes,
-handling busted memory, or promoting an idea.
+Read this file only when changing status, deciding whether to branch, allocating a campaign
+portfolio, repairing indexes, handling busted memory, or promoting an idea.
 
 ## Idea status
 
@@ -141,11 +141,31 @@ The advisory is not a hard block. When the user says only "continue" or "keep br
 use this priority:
 
 1. advise `VERIFY` when thresholds are reached;
-2. otherwise prefer `CREATE CHILD` on `survives` or qualified `weakened` nodes with open
-   expansion;
-3. recommend another `CREATE ROOT` only for an uncovered direction or explicit request.
+2. otherwise select among `VERIFY`, `CREATE CHILD`, and `CREATE ROOT` according to the largest
+   unresolved information need and lifecycle readiness;
+3. do not treat one viable open node as a reason to suppress every other root direction.
 
 Name at most three suggested IDs so the user retains control without receiving a long queue.
+
+## Campaign portfolio
+
+When an explicit campaign is active, read `leader-campaign.md`. Validation thresholds remain
+backlog controls, but they do not create a global depth-first or verification-first queue.
+
+- The leader, not a worker, allocates breadth, depth, and verification work.
+- A CREATE result remains speculative. Planned vertical fan-out requires a current accepted
+  `survives` or qualified `weakened` review, a valid branch brief, and open expansion.
+- Several descendants of one parent may be active only when their primary contributions differ.
+- Keep eligible sibling lineages or uncovered root directions in the active portfolio while
+  deepening a promising branch, with at least one position outside the leading lineage when a
+  legal alternative exists.
+- Reaching the unreviewed-child advisory pauses additional children under that node until review
+  debt is reduced or the user explicitly overrides the advisory. It does not close the branch.
+- Campaign completion freezes new dispatch but does not change idea, expansion, or evidence state.
+  Only accepted reviews publish those states.
+
+The leader's session-local queue is transient scheduling state. Workspace files and accepted
+reviews remain the sources of structural readiness and evidence state.
 
 ## Research kill gate
 

@@ -8,6 +8,7 @@ Read this file only for `CREATE ROOT`.
 - `brainstorm/BRIEF.md`
 - `brainstorm/ROOT_INDEX.md`
 - active root reservations, title only
+- in a campaign, the worker's own dispatch envelope and reservation fields
 
 Do not read any file under `ideas/`, `reviews/`, `branch_briefs/`, or `child_indexes/`.
 Do not read `BUSTED.md` or `EARLY_STOPS.md` before producing the initial candidate draft.
@@ -20,7 +21,8 @@ not read other early-stop entries.
 
 1. Restate the problem internally from `BRIEF.md` without importing outside proposals.
 2. Scan root titles only to avoid direct title conflict.
-3. Choose one meaningfully distinct direction.
+3. Choose one meaningfully distinct direction, or follow the campaign's assigned primary
+   direction without importing another worker's assignment.
 4. Draft the candidate without reading prior failed-idea records, except for the one explicitly
    named early-stop record in a user-directed reconsideration.
 5. Read the compact entries in `BUSTED.md` and compare the draft against their failure
@@ -34,7 +36,9 @@ not read other early-stop entries.
    matching record. If the archive append cannot commit, stop without discarding or retrying.
    Formalize ambiguity for later `VERIFY`.
 8. Retry at most twice across all discarded attempts.
-9. Reserve the next three-digit root ID when concurrency is possible.
+9. Reserve the next three-digit root ID when concurrency is possible. In a campaign, record the
+   assigned lineage, primary direction, success criterion, and concise overlap exclusion in this
+   worker's reservation; other workers may read only its title.
 10. Write exactly one `ideas/NNN.md` from the idea template. Set `origin_early_stop` and
     `origin_reopen_reason` only when the user explicitly named the originating `ES-*` record.
 11. Append one title-only row to `ROOT_INDEX.md` with `Display` equal to the stable ID,
@@ -68,6 +72,17 @@ threshold is reached:
 
 The advisory does not block an explicitly requested new root.
 
+## Campaign assignment
+
+The leader must assign root workers non-overlapping primary contributions before concurrent
+dispatch. This assignment is a scope boundary, not a required conclusion. The worker must not
+inspect other reservations beyond the titles already allowed, read sibling bodies to prove
+distinctness, or silently switch to another active worker's direction.
+
+If the assigned direction is no longer compatible with `BRIEF.md` or cannot produce a coherent
+candidate, report the conflict to the leader and end the operation without substituting an
+unassigned near-duplicate.
+
 ## Generation guidance
 
 Prefer structural changes over cosmetic variations. Useful root directions may:
@@ -80,11 +95,11 @@ Prefer structural changes over cosmetic variations. Useful root directions may:
 - treat the observed effect as bias, artifact, or selection;
 - redefine the objective or success metric.
 
-Do not force novelty by making the idea incoherent. The file must still state a plausible route,
-a distinctive consequence, weaknesses, and verification questions.
+Novelty still requires a coherent proposition, plausible route, distinctive consequence,
+weaknesses, and verification questions.
 
 ## Output limit
 
 Create at most one idea, three early-stop records, and one reconsideration resolution event.
-Early stops get no idea or index row. Do not rank roots, compare bodies, verify, create children,
-or update the main project in the same run.
+Early stops get no idea or index row. Ranking roots, comparing bodies, verification, child
+creation, and project promotion belong to later authorized operations.
